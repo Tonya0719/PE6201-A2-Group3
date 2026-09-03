@@ -1,0 +1,16 @@
+PURPOSE
+This file will hold the fixed judgement-check rubric if the team uses an LLM-as-judge.
+
+INPUT
+A case's committed ground truth / required evidence plus the Agent's final reason and evidence record.
+
+OUTPUT
+A structured judgement of whether the reason/evidence is good enough under the team's fixed rubric.
+
+RULES TO PRESERVE WHEN IMPLEMENTED
+- Use judgement only for fields that cannot be reliably code-checked.
+- The judge model must be different from the model being graded.
+- Commit the final prompt and record the judge model/version in results.
+- Do not let the judge replace deterministic checks for fixed fields such as decision, trigger, missing item, or gated-action count.
+
+A2 mapping: D4 judgement checks.

@@ -1,0 +1,4 @@
+# Add only packages that the final notebook/code actually imports.
+# Keep dependencies minimal. The teacher-provided fixture scripts use only Python's standard library.
+# Example later, if the live backend uses the OpenAI-compatible OpenRouter API:
+# openai
