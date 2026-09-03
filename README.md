@@ -50,8 +50,8 @@ For a **6-person team**, a practical ownership model is:
 |---|---|---|
 | A + B | Agent loop / parallel tools | `src/agent_core.py` |
 | C | Tools / descriptors | `src/tools.py` |
-| D | Guardrails | `src/guardrails.py` + `evals/guardrail_cases.json` |
-| E + F | Evaluation / scripted harness | `src/evaluation.py` |
+| D + E | Guardrails | `src/guardrails.py` + `evals/guardrail_cases.json` |
+| F + G | Evaluation / scripted harness | `src/evaluation.py` |
 | One person also owns | Cost model | `src/cost_analysis.py` |
 | Everyone | Evaluation cases | `make_fixtures_A.py` + `expected_outcomes_A.json` |
 | Everyone | Live battery | Do **not** change core code; only change `MODEL` / run the notebook |
