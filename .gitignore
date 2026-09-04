@@ -1,0 +1,11 @@
+.env
+.env.*
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
+.vscode/
+.idea/
+results/**/*.json
+results/**/*.csv
+!results/README.md
