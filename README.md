@@ -49,13 +49,13 @@ For a **6-person team**, a practical ownership model is:
 | People | Primary responsibility | Main files |
 |---|---|---|
 | A + B | Agent loop / parallel tools | `src/agent_core.py` |
-| C | Tools / descriptors | `src/tools.py` |
+| C(probably with another)| Tools / descriptors | `src/tools.py` |
 | D + E | Guardrails | `src/guardrails.py` + `evals/guardrail_cases.json` |
 | F + G | Evaluation / scripted harness | `src/evaluation.py` |
 | One person also owns | Cost model | `src/cost_analysis.py` |
 | Everyone | Evaluation cases | `make_fixtures_A.py` + `expected_outcomes_A.json` |
 | Everyone | Live battery | Do **not** change core code; only change `MODEL` / run the notebook |
-| D7 collaboration | Loop owner + Tool/Guardrail owner | Reproduce failures from the working agent; do **not** create a separate `bad_agent` |
+| D7 collaboration(one main onwer) | Loop owner + Tool/Guardrail owner | Reproduce failures from the working agent; do **not** create a separate `bad_agent` |
 
 If there are **7 team members**, D6 / the cost model can be owned by one person independently.
 
