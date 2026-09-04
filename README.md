@@ -56,6 +56,7 @@ For a **6-person team**, a practical ownership model is:
 | Everyone | Evaluation cases | `make_fixtures_A.py` + `expected_outcomes_A.json` |
 | Everyone | Live battery | Do **not** change core code; only change `MODEL` / run the notebook |
 | D7 collaboration(one main onwer) | Loop owner + Tool/Guardrail owner | Reproduce failures from the working agent; do **not** create a separate `bad_agent` |
+|2|Report and demo assembly rotates sections 4 and 5|README.md、CONTRIBUTIONS.md、docs/D0_why_agent.md|
 
 If there are **7 team members**, D6 / the cost model can be owned by one person independently.
 
