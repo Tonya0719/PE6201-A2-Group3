@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 You are a strict secondary grader for PE6201 A2 Problem A.
 Judge only the quality of the final reason and evidence, not fields already code-checked.
 
@@ -11,3 +12,21 @@ Return JSON only:
 {"pass": true|false, "reason": "one short sentence"}
 
 Use a different model family from the Agent model when this judge is used.
+=======
+PURPOSE
+This file will hold the fixed judgement-check rubric if the team uses an LLM-as-judge.
+
+INPUT
+A case's committed ground truth / required evidence plus the Agent's final reason and evidence record.
+
+OUTPUT
+A structured judgement of whether the reason/evidence is good enough under the team's fixed rubric.
+
+RULES TO PRESERVE WHEN IMPLEMENTED
+- Use judgement only for fields that cannot be reliably code-checked.
+- The judge model must be different from the model being graded.
+- Commit the final prompt and record the judge model/version in results.
+- Do not let the judge replace deterministic checks for fixed fields such as decision, trigger, missing item, or gated-action count.
+
+A2 mapping: D4 judgement checks.
+>>>>>>> 5bd9f6e092f1512df28d8169c82e5b4e456af3a3

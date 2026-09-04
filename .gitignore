@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .env
 .env.*
 __pycache__/
@@ -9,3 +10,23 @@ __pycache__/
 results/**/*.json
 results/**/*.csv
 !results/README.md
+=======
+# Secrets
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local temporary outputs
+*.tmp
+*.log
+>>>>>>> 5bd9f6e092f1512df28d8169c82e5b4e456af3a3

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """D3 hard guardrails. These are code controls, not prompt advice."""
 import json
 
@@ -31,3 +32,32 @@ def check_autonomy(tool_call: dict, autonomy: str, approved: bool = False):
     if autonomy == "suggest":
         return False, "AUTONOMY_SUGGEST_ONLY"
     return False, "HUMAN_CONFIRMATION_REQUIRED"
+=======
+"""Deterministic code guardrails for the Agent.
+
+Purpose
+-------
+Provide hard controls that remain effective regardless of model behaviour.
+
+Expected inputs
+---------------
+Current run state such as turn number, cumulative cost/token use, action signature,
+requested gated action, configured autonomy setting, and (for confirm mode) human approval.
+
+Expected outputs
+----------------
+Allow / block / halt decisions plus a clear reason that can be logged in the trace.
+
+Required controls
+-----------------
+- Step cap
+- Budget ceiling
+- Action de-duplication
+- Autonomy gate: suggest / confirm / act
+
+The gate belongs directly in front of the irreversible local write, not in front
+of ordinary read-only retrieval.
+
+A2 mapping: D3(a); tested by D3(b); one control may be removed for D7 Failure 1.
+"""
+>>>>>>> 5bd9f6e092f1512df28d8169c82e5b4e456af3a3
