@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 """Problem A tool layer aligned to the D1/D2 team outline.
 
 Agent-visible tools (5):
@@ -294,7 +294,7 @@ IRREVERSIBLE? Yes — gated by system autonomy and write de-duplication. The mod
 
 def get_tool_specs(version: str = "v2"):
     return TOOL_SPECS_V1 if version == "v1" else TOOL_SPECS_V2
-=======
+
 """Problem A tool layer and tool descriptors.
 
 Purpose
@@ -325,4 +325,4 @@ Design requirements
 
 A2 mapping: D2(a), D2(b), gated action used by D3.
 """
->>>>>>> 5bd9f6e092f1512df28d8169c82e5b4e456af3a3
+

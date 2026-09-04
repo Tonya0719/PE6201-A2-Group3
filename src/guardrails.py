@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 """D3 hard guardrails. These are code controls, not prompt advice."""
 import json
 
@@ -32,7 +32,7 @@ def check_autonomy(tool_call: dict, autonomy: str, approved: bool = False):
     if autonomy == "suggest":
         return False, "AUTONOMY_SUGGEST_ONLY"
     return False, "HUMAN_CONFIRMATION_REQUIRED"
-=======
+
 """Deterministic code guardrails for the Agent.
 
 Purpose
@@ -60,4 +60,4 @@ of ordinary read-only retrieval.
 
 A2 mapping: D3(a); tested by D3(b); one control may be removed for D7 Failure 1.
 """
->>>>>>> 5bd9f6e092f1512df28d8169c82e5b4e456af3a3
+

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 """Single-agent ReAct control loop for Problem A.
 
 Expected efficient trajectories from the team outline:
@@ -484,7 +483,7 @@ def run_agent(
         "turns": config.STEP_CAP, "input_tokens": inp, "output_tokens": out, "cost": cost,
         "tool_history": history, "guardrail_events": guards, "gated_action_count": gated_count,
     }
-=======
+
 """Single-agent ReAct core and model seam.
 
 Purpose
@@ -526,4 +525,4 @@ Do not calculate evaluation pass rates or the D6 business cost model here.
 
 A2 mapping: D1, D2(c), D5 model seam, instrumentation used by D6/D7.
 """
->>>>>>> 5bd9f6e092f1512df28d8169c82e5b4e456af3a3
+

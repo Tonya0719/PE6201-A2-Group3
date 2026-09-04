@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 """D4/D5 evaluation harness. Outcome-graded, clean state per case."""
 from __future__ import annotations
 import json, statistics
@@ -58,7 +58,7 @@ def summarize_results(records: list[dict]):
         "output_tokens": sum(r.get("output_tokens",0) for r in records),
         "api_cost": sum(r.get("cost",0.0) for r in records),
     }
-=======
+
 """Evaluation harness, graders, and run-level metrics.
 
 Purpose
@@ -94,4 +94,4 @@ Grading principles
 
 A2 mapping: D4, D5(a), D5(b); provides measured P and run data for D0(b), D6, D7.
 """
->>>>>>> 5bd9f6e092f1512df28d8169c82e5b4e456af3a3
+
