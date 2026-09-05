@@ -2,7 +2,7 @@
 
 """Central configuration for A2."""
 
-BACKEND = "live"                 # "scripted" or "live"
+BACKEND = "scripted"             # "scripted" or "live"
 MODEL = "google/gemini-2.5-flash-lite"
 BASE_URL = "https://openrouter.ai/api/v1"
 

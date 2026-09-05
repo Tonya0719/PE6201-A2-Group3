@@ -3,12 +3,12 @@ from __future__ import annotations
 import argparse, json
 from src import config
 from src.agent_core import run_agent
-from src.evaluation import run_evaluation, summarize_results
+from src.harness import run_evaluation, summarize_results
 
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--claim", default="CLM-8842")
+    p.add_argument("--claim", default="CLM-8933")
     p.add_argument("--backend", choices=["scripted", "live"])
     p.add_argument("--model")
     p.add_argument("--tool-spec", choices=["v1", "v2"])

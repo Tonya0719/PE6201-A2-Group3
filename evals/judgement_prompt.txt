@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 You are a strict secondary grader for PE6201 A2 Problem A.
 Judge only the quality of the final reason and evidence, not fields already code-checked.
 
@@ -29,4 +28,3 @@ RULES TO PRESERVE WHEN IMPLEMENTED
 - Do not let the judge replace deterministic checks for fixed fields such as decision, trigger, missing item, or gated-action count.
 
 A2 mapping: D4 judgement checks.
->>>>>>> 5bd9f6e092f1512df28d8169c82e5b4e456af3a3

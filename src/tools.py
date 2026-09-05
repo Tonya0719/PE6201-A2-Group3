@@ -75,13 +75,6 @@ def already_decided(case_id: str) -> bool:
     return any(x.get("case_id") == case_id for x in OUTBOX)
 
 
-# Static dependency map derived from the supplied procedure fixture.
-# This is prompt/runtime configuration, not an agent-visible helper/tool.
-PREAUTH_REQUIRED_CODES = tuple(
-    x["code"] for x in _load("procedures.json") if bool(x.get("requires_preauth"))
-)
-
-
 # ---------- Agent-visible tools ----------
 
 def get_claim(claim_id: str):
@@ -184,6 +177,14 @@ def reset_outbox():
     OUTBOX.clear()
 
 
+def get_outbox_record(case_id: str):
+    """Internal runtime/evaluation helper; not exposed as an Agent tool."""
+    for row in reversed(OUTBOX):
+        if row.get("case_id") == case_id:
+            return dict(row)
+    return None
+
+
 TOOL_REGISTRY = {
     "get_claim": get_claim,
     "lookup_policy": lookup_policy,
@@ -275,7 +276,7 @@ IRREVERSIBLE? No.
 4. NAME + SIGNATURE
 get_preauthorisation(member_id: str, procedure_code: str)
 WHAT: Retrieve raw matching preauthorisation dates. You must compare them with the claim date_of_service yourself.
-INPUT: member_id and a procedure code known from the static preauth-required list in the system prompt.
+INPUT: member_id and a procedure code that `check_coverage` has already indicated requires preauthorisation.
 RETURNS: {procedure_code, records:[{preauthorisation_id, valid_from, valid_to}]}; records may be empty.
 SIZE BOUND: at most 3 matching records.
 FAILS WHEN: malformed IDs; an empty records list means no matching preauthorisation exists.
