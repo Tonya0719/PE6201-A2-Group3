@@ -2,7 +2,7 @@
 
 """Central configuration for A2."""
 
-BACKEND = "scripted"             # "scripted" or "live"
+BACKEND = "live"             # "scripted" or "live"
 MODEL = "google/gemini-2.5-flash-lite"
 BASE_URL = "https://openrouter.ai/api/v1"
 
@@ -11,6 +11,7 @@ BUDGET_USD = 0.1
 AUTONOMY = "confirm"            # "suggest" | "confirm" | "act"
 
 PARALLEL_ENABLED = True
+MAX_TOOL_CALLS_PER_TURN = None  # None = batched; 1 = D2(c) sequential baseline.
 TOOL_SPEC_VERSION = "v2"       # "v1" | "v2"
 
 USE_JSON_RESPONSE_FORMAT = True
@@ -34,7 +35,8 @@ Expected inputs / settings
 - BASE_URL / API-key environment-variable name for the live backend.
 - STEP_CAP and BUDGET_USD for code guardrails.
 - AUTONOMY: "suggest", "confirm", or "act".
-- PARALLEL_ENABLED for the D2(c) controlled comparison.
+- MAX_TOOL_CALLS_PER_TURN for the D2(c) sequential-vs-batched comparison.
+- PARALLEL_ENABLED for physical concurrent execution within an already batched turn.
 - TOOL_SPEC_VERSION for the D2(b) v1→v2 controlled comparison.
 
 Expected output

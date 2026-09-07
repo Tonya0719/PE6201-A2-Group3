@@ -10,6 +10,8 @@ import json
 import os
 import re
 import time
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 from src import config
 
@@ -34,6 +36,29 @@ def _get_openrouter_key():
     except Exception:
         pass
     return getpass.getpass("Paste your OpenRouter API key (hidden): ")
+
+
+def get_openrouter_credit_balance():
+    """Return account-level OpenRouter credits, usage, and remaining balance."""
+    url = f"{config.BASE_URL.rstrip('/')}/credits"
+    req = Request(url, headers={"Authorization": f"Bearer {_get_openrouter_key()}"}, method="GET")
+    try:
+        with urlopen(req, timeout=30) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+    except HTTPError as e:
+        detail = e.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"OpenRouter credits request failed: HTTP {e.code} {detail}") from e
+    except URLError as e:
+        raise RuntimeError(f"OpenRouter credits request failed: {e.reason}") from e
+
+    data = payload.get("data", {})
+    total_credits = float(data.get("total_credits", 0.0))
+    total_usage = float(data.get("total_usage", 0.0))
+    return {
+        "total_credits": total_credits,
+        "total_usage": total_usage,
+        "remaining_credits": total_credits - total_usage,
+    }
 
 
 def _live(messages: list[dict]):

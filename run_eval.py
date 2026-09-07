@@ -22,6 +22,7 @@ def main():
     records = run_evaluation(
         approved_for_write=True,
         parallel_enabled=config.PARALLEL_ENABLED,
+        max_tool_calls_per_turn=config.MAX_TOOL_CALLS_PER_TURN,
         tool_spec_version=config.TOOL_SPEC_VERSION,
     )
     summary = summarize_results(records)
@@ -30,6 +31,7 @@ def main():
     payload = {
         "backend": config.BACKEND,
         "parallel_enabled": config.PARALLEL_ENABLED,
+        "max_tool_calls_per_turn": config.MAX_TOOL_CALLS_PER_TURN,
         "tool_spec_version": config.TOOL_SPEC_VERSION,
         "summary": summary,
         "records": records,

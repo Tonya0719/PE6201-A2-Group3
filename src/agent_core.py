@@ -91,6 +91,12 @@ def _turn_has_line_verification(calls: list[dict]):
     return any(c.get("name") in {"check_coverage", "get_preauthorisation"} for c in calls)
 
 
+def _apply_tool_call_limit(calls: list[dict], max_tool_calls_per_turn: int | None):
+    if max_tool_calls_per_turn is None or max_tool_calls_per_turn <= 0:
+        return calls, []
+    return calls[:max_tool_calls_per_turn], calls[max_tool_calls_per_turn:]
+
+
 def _result_from_decision_source(
     *,
     claim_id: str,
@@ -135,10 +141,12 @@ def run_agent(
     approved_for_write: bool = False,
     *,
     parallel_enabled: bool | None = None,
+    max_tool_calls_per_turn: int | None = None,
     tool_spec_version: str | None = None,
     debug_raw: bool = False,
 ):
     parallel = config.PARALLEL_ENABLED if parallel_enabled is None else parallel_enabled
+    max_calls = config.MAX_TOOL_CALLS_PER_TURN if max_tool_calls_per_turn is None else max_tool_calls_per_turn
     spec_version = config.TOOL_SPEC_VERSION if tool_spec_version is None else tool_spec_version
     messages = [
         {"role": "system", "content": build_system_prompt(get_tool_specs(spec_version))},
@@ -300,9 +308,14 @@ def run_agent(
         calls, blocked = check_duplicate_actions(raw_calls, seen)
         if blocked:
             guards.append({"event": "DUPLICATE_ACTION_BLOCKED", "calls": blocked})
-        approved = []
-        for c in calls:
-            approved.append(c)
+        approved, deferred = _apply_tool_call_limit(calls, max_calls)
+        if deferred:
+            guards.append({
+                "event": "TOOL_CALLS_DEFERRED_BY_MAX_TOOL_CALLS_PER_TURN",
+                "max_tool_calls_per_turn": max_calls,
+                "deferred_calls": deferred,
+            })
+        for c in approved:
             seen.add(action_signature(c))
 
         if approved:
@@ -322,7 +335,10 @@ def run_agent(
                 helper_done = True
 
         history.append({"turn": tool_turns, "model_call": turn, "tool_calls": approved, "observations": observations})
-        messages.append({"role": "assistant", "content": mr["text"]})
+        assistant_content = mr["text"]
+        if deferred:
+            assistant_content = json.dumps({"type": "action", "tool_calls": approved}, ensure_ascii=False)
+        messages.append({"role": "assistant", "content": assistant_content})
         messages.append({"role": "user", "content": json.dumps({"type": "observation", "results": observations}, ensure_ascii=False)})
 
         nudge = _needs_stage1_early_exit_nudge(observations)
