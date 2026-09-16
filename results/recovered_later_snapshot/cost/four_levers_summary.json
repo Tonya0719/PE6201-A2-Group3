@@ -1,0 +1,51 @@
+{
+  "lever_1_tool_block_size": {
+    "attacks": "Linear in turns - resent every turn, called or not",
+    "built_in": "D2(a) - the tools we cut",
+    "actual_5_tool_spec_tokens_est": 657,
+    "hypothetical_7_tool_spec_tokens_est": 838,
+    "increase_tokens_per_turn_est": 181,
+    "increase_pct": 27.5,
+    "extra_input_tokens_per_run_at_median_T4": 724,
+    "extra_input_tokens_per_run_at_worst_T7": 1267,
+    "extra_input_tokens_per_month_at_8000_volume_T4": 5792000,
+    "note": "check_hospital_panel and check_missing_documents were kept as plain Python helpers, not agent tools, because neither is a judgment call - this estimates the token cost we avoided."
+  },
+  "lever_2_turn_count": {
+    "attacks": "Quadratic term - the biggest lever",
+    "built_in": "D2(c) - parallel tool calls",
+    "sequential_model_calls": 334,
+    "sequential_tool_turns": 268,
+    "batched_model_calls": 315,
+    "batched_tool_turns": 249,
+    "model_calls_saved": 19,
+    "tool_turns_saved": 19,
+    "pass_rate_unchanged": true
+  },
+  "lever_3_observation_size": {
+    "attacks": "Compounds - every observation is re-sent on every later turn",
+    "built_in": "D2(b) - the descriptor rewrite",
+    "v1_input_tokens": 611040,
+    "v2_input_tokens": 787766,
+    "input_token_increase_pct": 28.9,
+    "v1_pass_rate": 0.7121212121212122,
+    "v2_pass_rate": 0.6212121212121212,
+    "note": "v2 costs more AND performs worse - not a trade-off, a straight loss."
+  },
+  "lever_4_success_rate": {
+    "attacks": "Sets layer 2 (expected failure cost) - usually the biggest layer",
+    "built_in": "D4 - the eval set measured pass rate",
+    "best_model": "google/gemini-2.5-flash",
+    "best_model_pass_rate": 0.6818181818181818,
+    "best_model_variable_cost_per_run": 0.005243987878787879,
+    "best_model_expected_failure_cost": 2.4181818181818184,
+    "best_model_cost_per_successful_task": 2.423425806060606,
+    "failure_cost_dominance_ratio": 461.1,
+    "break_even": {
+      "cheapest_model": "meta-llama/llama-3.3-70b-instruct",
+      "most_reliable_model": "google/gemini-2.5-flash",
+      "break_even_success_rate": 0.6812790739234449,
+      "cheapest_clears_break_even": false
+    }
+  }
+}

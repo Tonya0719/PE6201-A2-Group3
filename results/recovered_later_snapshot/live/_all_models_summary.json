@@ -1,0 +1,90 @@
+{
+  "models": {
+    "openai/gpt-4o-mini": {
+      "tier": "cheap",
+      "family": "OpenAI",
+      "trials": 66,
+      "pass_rate": 0.6212121212121212,
+      "negative_trials": 39,
+      "negative_pass_rate": 0.38461538461538464,
+      "median_turns": 4.0,
+      "worst_turns": 5,
+      "cap_hits": 0,
+      "input_tokens": 735726,
+      "output_tokens": 26056,
+      "api_cost": 0.12599249999999998
+    },
+    "amazon/nova-2-lite-v1": {
+      "tier": "mid",
+      "family": "Amazon",
+      "trials": 66,
+      "pass_rate": 0.5606060606060606,
+      "negative_trials": 39,
+      "negative_pass_rate": 0.3076923076923077,
+      "median_turns": 4.0,
+      "worst_turns": 5,
+      "cap_hits": 0,
+      "input_tokens": 754848,
+      "output_tokens": 35097,
+      "api_cost": 0.3141968999999998
+    },
+    "google/gemini-2.5-flash": {
+      "tier": "mid",
+      "family": "Google",
+      "trials": 66,
+      "pass_rate": 0.6818181818181818,
+      "negative_trials": 39,
+      "negative_pass_rate": 0.5384615384615384,
+      "median_turns": 4.0,
+      "worst_turns": 5,
+      "cap_hits": 0,
+      "input_tokens": 803969,
+      "output_tokens": 41965,
+      "api_cost": 0.3461032
+    },
+    "deepseek/deepseek-chat-v3.1": {
+      "tier": "cheap",
+      "family": "DeepSeek",
+      "trials": 66,
+      "pass_rate": 0.6212121212121212,
+      "negative_trials": 39,
+      "negative_pass_rate": 0.38461538461538464,
+      "median_turns": 4.0,
+      "worst_turns": 5,
+      "cap_hits": 0,
+      "input_tokens": 787766,
+      "output_tokens": 35828,
+      "api_cost": 0.2309781
+    },
+    "meta-llama/llama-3.3-70b-instruct": {
+      "tier": "cheap",
+      "family": "meta",
+      "trials": 66,
+      "pass_rate": 0.5606060606060606,
+      "negative_trials": 39,
+      "negative_pass_rate": 0.358974358974359,
+      "median_turns": 4.0,
+      "worst_turns": 5,
+      "cap_hits": 0,
+      "input_tokens": 681574,
+      "output_tokens": 23529,
+      "api_cost": 0.07568668000000003
+    },
+    "mistralai/mistral-small-2603": {
+      "tier": "cheap",
+      "family": "Mistral",
+      "trials": 66,
+      "pass_rate": 0.5151515151515151,
+      "negative_trials": 39,
+      "negative_pass_rate": 0.3076923076923077,
+      "median_turns": 4.0,
+      "worst_turns": 6,
+      "cap_hits": 0,
+      "input_tokens": 789520,
+      "output_tokens": 99581,
+      "api_cost": 0.17817660000000002
+    }
+  },
+  "total_cost_usd": 1.2711339799999997,
+  "backend_used": "live"
+}

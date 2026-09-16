@@ -1,0 +1,624 @@
+{
+  "before": {
+    "type": "final",
+    "decision": "approve_in_principle",
+    "trigger": null,
+    "missing_item": null,
+    "reason": "All lines resolved. approved_total=2180; refused_total=300.",
+    "evidence": [
+      {
+        "source": "check_coverage",
+        "fact": "47120 covered"
+      },
+      {
+        "source": "check_coverage",
+        "fact": "62480 covered; preauth PA-5521 valid"
+      },
+      {
+        "source": "check_coverage",
+        "fact": "31255 excluded: EX-14 cosmetic dermatology"
+      }
+    ],
+    "case_id": "CLM-8842",
+    "status": "completed",
+    "write_status": "recorded",
+    "decision_source": "actual_decision_record",
+    "turns": 5,
+    "tool_turns": 5,
+    "model_calls": 6,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost": 0.0,
+    "tool_history": [
+      {
+        "turn": 1,
+        "model_call": 1,
+        "tool_calls": [
+          {
+            "name": "get_claim",
+            "arguments": {
+              "claim_id": "CLM-8842"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "get_claim",
+            "ok": true,
+            "result": {
+              "claim_id": "CLM-8842",
+              "member_id": "M-2214",
+              "hospital_id": "H-114",
+              "date_of_service": "2026-09-02",
+              "narrative": "Admitted for appendix removal. Surgeon also treated a back problem and did a skin procedure while I was in.",
+              "documents": [
+                "itemised_bill",
+                "discharge_summary"
+              ],
+              "lines": [
+                {
+                  "code": "47120",
+                  "amount": 1400
+                },
+                {
+                  "code": "62480",
+                  "amount": 780
+                },
+                {
+                  "code": "31255",
+                  "amount": 300
+                }
+              ],
+              "duplicate_of": null
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "model_call": 2,
+        "tool_calls": [
+          {
+            "name": "lookup_policy",
+            "arguments": {
+              "member_id": "M-2214"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "lookup_policy",
+            "ok": true,
+            "result": {
+              "policy_id": "POL-3310",
+              "status": "active",
+              "start_date": "2026-04-01",
+              "end_date": "2027-03-31",
+              "annual_limit": 12000,
+              "used_to_date": 2800,
+              "remaining_annual_limit": 9200,
+              "exclusions": [
+                {
+                  "code": "31255",
+                  "rule": "EX-14 cosmetic dermatology"
+                },
+                {
+                  "code": "15823",
+                  "rule": "EX-14 cosmetic dermatology"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "turn": 3,
+        "model_call": 3,
+        "tool_calls": [
+          {
+            "name": "check_coverage",
+            "arguments": {
+              "policy_id": "POL-3310",
+              "procedure_code": "47120"
+            }
+          },
+          {
+            "name": "check_coverage",
+            "arguments": {
+              "policy_id": "POL-3310",
+              "procedure_code": "62480"
+            }
+          },
+          {
+            "name": "check_coverage",
+            "arguments": {
+              "policy_id": "POL-3310",
+              "procedure_code": "31255"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "check_coverage",
+            "ok": true,
+            "result": {
+              "procedure_code": "47120",
+              "coverage_status": "covered",
+              "exclusion_code": null,
+              "requires_preauth": false
+            }
+          },
+          {
+            "tool": "check_coverage",
+            "ok": true,
+            "result": {
+              "procedure_code": "62480",
+              "coverage_status": "covered",
+              "exclusion_code": null,
+              "requires_preauth": true
+            }
+          },
+          {
+            "tool": "check_coverage",
+            "ok": true,
+            "result": {
+              "procedure_code": "31255",
+              "coverage_status": "excluded",
+              "exclusion_code": "EX-14 cosmetic dermatology",
+              "requires_preauth": false
+            }
+          },
+          {
+            "type": "helper_context",
+            "hospital_panel": true,
+            "missing_documents": []
+          }
+        ]
+      },
+      {
+        "turn": 4,
+        "model_call": 4,
+        "tool_calls": [
+          {
+            "name": "get_preauthorisation",
+            "arguments": {
+              "member_id": "M-2214",
+              "procedure_code": "62480"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "get_preauthorisation",
+            "ok": true,
+            "result": {
+              "procedure_code": "62480",
+              "records": [
+                {
+                  "preauthorisation_id": "PA-5521",
+                  "valid_from": "2026-08-01",
+                  "valid_to": "2026-10-31"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "turn": 5,
+        "model_call": 5,
+        "tool_calls": [
+          {
+            "name": "issue_decision_letter",
+            "arguments": {
+              "case_id": "CLM-8842",
+              "decision": "approve_in_principle",
+              "trigger": null,
+              "missing_item": null,
+              "reason": "All lines resolved. approved_total=2180; refused_total=300.",
+              "evidence": [
+                {
+                  "source": "check_coverage",
+                  "fact": "47120 covered"
+                },
+                {
+                  "source": "check_coverage",
+                  "fact": "62480 covered; preauth PA-5521 valid"
+                },
+                {
+                  "source": "check_coverage",
+                  "fact": "31255 excluded: EX-14 cosmetic dermatology"
+                }
+              ]
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "issue_decision_letter",
+            "ok": true,
+            "result": {
+              "recorded": true,
+              "case_id": "CLM-8842",
+              "decision": "approve_in_principle"
+            }
+          }
+        ],
+        "governance_cliff": true
+      }
+    ],
+    "guardrail_events": [],
+    "gated_action_count": 1
+  },
+  "after": {
+    "case_id": "CLM-8842",
+    "status": "stopped",
+    "failure_reason": "NO_FINAL_BEFORE_CAP",
+    "write_status": "not_attempted",
+    "decision_source": null,
+    "turns": 8,
+    "tool_turns": 8,
+    "model_calls": 8,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost": 0.0,
+    "tool_history": [
+      {
+        "turn": 1,
+        "model_call": 1,
+        "tool_calls": [
+          {
+            "name": "get_claim",
+            "arguments": {
+              "claim_id": "CLM-8842"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "get_claim",
+            "ok": true,
+            "result": {
+              "claim_id": "CLM-8842",
+              "member_id": "M-2214",
+              "hospital_id": "H-114",
+              "date_of_service": "2026-09-02",
+              "narrative": "Admitted for appendix removal. Surgeon also treated a back problem and did a skin procedure while I was in.",
+              "documents": [
+                "itemised_bill",
+                "discharge_summary"
+              ],
+              "lines": [
+                {
+                  "code": "47120",
+                  "amount": 1400
+                },
+                {
+                  "code": "62480",
+                  "amount": 780
+                },
+                {
+                  "code": "31255",
+                  "amount": 300
+                }
+              ],
+              "duplicate_of": null
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "model_call": 2,
+        "tool_calls": [
+          {
+            "name": "get_claim",
+            "arguments": {
+              "claim_id": "CLM-8842"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "get_claim",
+            "ok": true,
+            "result": {
+              "claim_id": "CLM-8842",
+              "member_id": "M-2214",
+              "hospital_id": "H-114",
+              "date_of_service": "2026-09-02",
+              "narrative": "Admitted for appendix removal. Surgeon also treated a back problem and did a skin procedure while I was in.",
+              "documents": [
+                "itemised_bill",
+                "discharge_summary"
+              ],
+              "lines": [
+                {
+                  "code": "47120",
+                  "amount": 1400
+                },
+                {
+                  "code": "62480",
+                  "amount": 780
+                },
+                {
+                  "code": "31255",
+                  "amount": 300
+                }
+              ],
+              "duplicate_of": null
+            }
+          }
+        ]
+      },
+      {
+        "turn": 3,
+        "model_call": 3,
+        "tool_calls": [
+          {
+            "name": "get_claim",
+            "arguments": {
+              "claim_id": "CLM-8842"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "get_claim",
+            "ok": true,
+            "result": {
+              "claim_id": "CLM-8842",
+              "member_id": "M-2214",
+              "hospital_id": "H-114",
+              "date_of_service": "2026-09-02",
+              "narrative": "Admitted for appendix removal. Surgeon also treated a back problem and did a skin procedure while I was in.",
+              "documents": [
+                "itemised_bill",
+                "discharge_summary"
+              ],
+              "lines": [
+                {
+                  "code": "47120",
+                  "amount": 1400
+                },
+                {
+                  "code": "62480",
+                  "amount": 780
+                },
+                {
+                  "code": "31255",
+                  "amount": 300
+                }
+              ],
+              "duplicate_of": null
+            }
+          }
+        ]
+      },
+      {
+        "turn": 4,
+        "model_call": 4,
+        "tool_calls": [
+          {
+            "name": "get_claim",
+            "arguments": {
+              "claim_id": "CLM-8842"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "get_claim",
+            "ok": true,
+            "result": {
+              "claim_id": "CLM-8842",
+              "member_id": "M-2214",
+              "hospital_id": "H-114",
+              "date_of_service": "2026-09-02",
+              "narrative": "Admitted for appendix removal. Surgeon also treated a back problem and did a skin procedure while I was in.",
+              "documents": [
+                "itemised_bill",
+                "discharge_summary"
+              ],
+              "lines": [
+                {
+                  "code": "47120",
+                  "amount": 1400
+                },
+                {
+                  "code": "62480",
+                  "amount": 780
+                },
+                {
+                  "code": "31255",
+                  "amount": 300
+                }
+              ],
+              "duplicate_of": null
+            }
+          }
+        ]
+      },
+      {
+        "turn": 5,
+        "model_call": 5,
+        "tool_calls": [
+          {
+            "name": "get_claim",
+            "arguments": {
+              "claim_id": "CLM-8842"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "get_claim",
+            "ok": true,
+            "result": {
+              "claim_id": "CLM-8842",
+              "member_id": "M-2214",
+              "hospital_id": "H-114",
+              "date_of_service": "2026-09-02",
+              "narrative": "Admitted for appendix removal. Surgeon also treated a back problem and did a skin procedure while I was in.",
+              "documents": [
+                "itemised_bill",
+                "discharge_summary"
+              ],
+              "lines": [
+                {
+                  "code": "47120",
+                  "amount": 1400
+                },
+                {
+                  "code": "62480",
+                  "amount": 780
+                },
+                {
+                  "code": "31255",
+                  "amount": 300
+                }
+              ],
+              "duplicate_of": null
+            }
+          }
+        ]
+      },
+      {
+        "turn": 6,
+        "model_call": 6,
+        "tool_calls": [
+          {
+            "name": "get_claim",
+            "arguments": {
+              "claim_id": "CLM-8842"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "get_claim",
+            "ok": true,
+            "result": {
+              "claim_id": "CLM-8842",
+              "member_id": "M-2214",
+              "hospital_id": "H-114",
+              "date_of_service": "2026-09-02",
+              "narrative": "Admitted for appendix removal. Surgeon also treated a back problem and did a skin procedure while I was in.",
+              "documents": [
+                "itemised_bill",
+                "discharge_summary"
+              ],
+              "lines": [
+                {
+                  "code": "47120",
+                  "amount": 1400
+                },
+                {
+                  "code": "62480",
+                  "amount": 780
+                },
+                {
+                  "code": "31255",
+                  "amount": 300
+                }
+              ],
+              "duplicate_of": null
+            }
+          }
+        ]
+      },
+      {
+        "turn": 7,
+        "model_call": 7,
+        "tool_calls": [
+          {
+            "name": "get_claim",
+            "arguments": {
+              "claim_id": "CLM-8842"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "get_claim",
+            "ok": true,
+            "result": {
+              "claim_id": "CLM-8842",
+              "member_id": "M-2214",
+              "hospital_id": "H-114",
+              "date_of_service": "2026-09-02",
+              "narrative": "Admitted for appendix removal. Surgeon also treated a back problem and did a skin procedure while I was in.",
+              "documents": [
+                "itemised_bill",
+                "discharge_summary"
+              ],
+              "lines": [
+                {
+                  "code": "47120",
+                  "amount": 1400
+                },
+                {
+                  "code": "62480",
+                  "amount": 780
+                },
+                {
+                  "code": "31255",
+                  "amount": 300
+                }
+              ],
+              "duplicate_of": null
+            }
+          }
+        ]
+      },
+      {
+        "turn": 8,
+        "model_call": 8,
+        "tool_calls": [
+          {
+            "name": "get_claim",
+            "arguments": {
+              "claim_id": "CLM-8842"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "get_claim",
+            "ok": true,
+            "result": {
+              "claim_id": "CLM-8842",
+              "member_id": "M-2214",
+              "hospital_id": "H-114",
+              "date_of_service": "2026-09-02",
+              "narrative": "Admitted for appendix removal. Surgeon also treated a back problem and did a skin procedure while I was in.",
+              "documents": [
+                "itemised_bill",
+                "discharge_summary"
+              ],
+              "lines": [
+                {
+                  "code": "47120",
+                  "amount": 1400
+                },
+                {
+                  "code": "62480",
+                  "amount": 780
+                },
+                {
+                  "code": "31255",
+                  "amount": 300
+                }
+              ],
+              "duplicate_of": null
+            }
+          }
+        ]
+      }
+    ],
+    "guardrail_events": [],
+    "gated_action_count": 0
+  },
+  "step_cap": 8,
+  "report_text": "\n==============================================================================\nD7 FAILURE 1 — LOOP-CONTROL FAILURE (action de-duplication)\n==============================================================================\n\nRUN 1 (before) - working agent, guard in place, normal claim\n  turns=5 tokens_in=0 tokens_out=0 cost=$0.0000 decision=approve_in_principle status=completed\n\nRUN 2 (after) - SAME agent, dedup guard REMOVED, model forced to repeat\n  turns=8 tokens_in=0 tokens_out=0 cost=$0.0000 decision=None status=stopped failure_reason=NO_FINAL_BEFORE_CAP\n\n------------------------------------------------------------------------------\n1. THE INSTRUMENTATION THAT FOUND IT\n   Turns and cost logged per run. RUN 2 raised no exception - it just\n   burned 8 turns (vs 5 normally) and\n   returned with failure_reason='NO_FINAL_BEFORE_CAP' instead\n   of a decision. A pass-rate table alone would show this as a failed\n   run, but nothing would tell you WHY without turn/cost instrumentation.\n\n2. THE TURN DISTRIBUTION\n   before: 5 turns | after (no guard): 8 turns | step cap: 8\n   RUN 2 hit the step cap: True\n\n3. THE FIX, AND WHY THE OTHER LAYERS WERE WRONG\n   Action de-duplication (check_duplicate_actions) is what normally\n   catches this - it fires BEFORE the repeated call is even executed.\n   The step cap did eventually stop RUN 2, but only after burning the\n   full budget with nothing to show for it - a cap BOUNDS the damage,\n   it does not DETECT the fault. A prompt-level fix cannot be relied\n   on either: the injected 'model' here is exactly the thing that\n   forgot. Only the code layer (guardrails.py) reliably remembers.\n\n4. BEFORE / AFTER, AND PROOF THE RESTORE WORKS\n   The monkey-patch in this script is undone in a finally block the\n   instant this demo ends - agent_core.py, guardrails.py, backends.py\n   are never edited on disk. The actual proof that 'putting the guard\n   back' recovers correct behaviour is your full run_eval.py result:\n   43/43 trials pass at 100%, WITH the real guard active the whole\n   time. A step cap this low did not truncate any legitimate run in\n   that set (worst_turns=5, cap=8), so restoring the\n   guard costs nothing on real cases - it only blocks the artificial\n   repeat this demo forced.\n   NOTE: a third 'guard restored + forced repeat' run is deliberately\n   NOT attempted here. This replay is a fixed, non-adaptive queue of\n   pre-recorded responses, not a real reasoning model - once the guard\n   correctly blocks the injected repeat, the replay has no sensible\n   fallback to continue with (a real model would just try something\n   else). That is a limitation of this test harness, not evidence\n   that the guard fails to recover the agent.\n==============================================================================\n"
+}

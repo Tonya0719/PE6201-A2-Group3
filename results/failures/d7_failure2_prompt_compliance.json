@@ -1,0 +1,316 @@
+{
+  "case_id": "CLM-8933",
+  "failure_type": "prompt_compliance_business_state_enforcement",
+  "recorded_source": "google/gemini-2.5-flash-lite live observation from earlier build",
+  "control_removed": "check_no_retrieval_after_decisive_intake",
+  "before": {
+    "type": "final",
+    "decision": "escalate",
+    "trigger": "duplicate_claim",
+    "missing_item": null,
+    "reason": "The claim is an exact duplicate of a previously submitted claim.",
+    "evidence": [
+      {
+        "source": "get_claim",
+        "fact": "duplicate_of: CLM-8710"
+      }
+    ],
+    "case_id": "CLM-8933",
+    "status": "completed",
+    "write_status": "recorded",
+    "decision_source": "actual_decision_record",
+    "turns": 4,
+    "tool_turns": 4,
+    "model_calls": 5,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost": 0.0,
+    "tool_history": [
+      {
+        "turn": 1,
+        "model_call": 1,
+        "tool_calls": [
+          {
+            "name": "get_claim",
+            "arguments": {
+              "claim_id": "CLM-8933"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "get_claim",
+            "ok": true,
+            "result": {
+              "claim_id": "CLM-8933",
+              "member_id": "M-2214",
+              "hospital_id": "H-114",
+              "date_of_service": "2026-08-20",
+              "narrative": "Resubmitting my August appendix claim, I do not think it was received.",
+              "documents": [
+                "itemised_bill",
+                "discharge_summary"
+              ],
+              "lines": [
+                {
+                  "code": "47120",
+                  "amount": 1500
+                }
+              ],
+              "duplicate_of": "CLM-8710"
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "model_call": 2,
+        "tool_calls": [
+          {
+            "name": "lookup_policy",
+            "arguments": {
+              "member_id": "M-2214"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "lookup_policy",
+            "ok": true,
+            "result": {
+              "policy_id": "POL-3310",
+              "status": "active",
+              "start_date": "2026-04-01",
+              "end_date": "2027-03-31",
+              "annual_limit": 12000,
+              "used_to_date": 2800,
+              "remaining_annual_limit": 9200,
+              "exclusions": [
+                {
+                  "code": "31255",
+                  "rule": "EX-14 cosmetic dermatology"
+                },
+                {
+                  "code": "15823",
+                  "rule": "EX-14 cosmetic dermatology"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "turn": 3,
+        "model_call": 3,
+        "tool_calls": [
+          {
+            "name": "check_coverage",
+            "arguments": {
+              "policy_id": "POL-3310",
+              "procedure_code": "47120"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "check_coverage",
+            "ok": true,
+            "result": {
+              "procedure_code": "47120",
+              "coverage_status": "covered",
+              "exclusion_code": null,
+              "requires_preauth": false
+            }
+          },
+          {
+            "type": "helper_context",
+            "hospital_panel": true,
+            "missing_documents": []
+          }
+        ]
+      },
+      {
+        "turn": 4,
+        "model_call": 4,
+        "tool_calls": [
+          {
+            "name": "issue_decision_letter",
+            "arguments": {
+              "case_id": "CLM-8933",
+              "decision": "escalate",
+              "trigger": "duplicate_claim",
+              "reason": "The claim is an exact duplicate of a previously submitted claim.",
+              "evidence": [
+                {
+                  "source": "get_claim",
+                  "fact": "duplicate_of: CLM-8710"
+                }
+              ],
+              "missing_item": null
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "issue_decision_letter",
+            "ok": true,
+            "result": {
+              "recorded": true,
+              "case_id": "CLM-8933",
+              "decision": "escalate"
+            }
+          }
+        ],
+        "governance_cliff": true
+      }
+    ],
+    "guardrail_events": [],
+    "gated_action_count": 1
+  },
+  "after": {
+    "type": "final",
+    "decision": "escalate",
+    "trigger": "duplicate_claim",
+    "missing_item": null,
+    "reason": "The claim is an exact duplicate of a previously submitted claim.",
+    "evidence": [
+      {
+        "source": "get_claim",
+        "fact": "duplicate_of: CLM-8710"
+      }
+    ],
+    "case_id": "CLM-8933",
+    "status": "completed",
+    "write_status": "held",
+    "decision_source": "attempted_gated_action",
+    "turns": 2,
+    "tool_turns": 2,
+    "model_calls": 5,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost": 0.0,
+    "tool_history": [
+      {
+        "turn": 1,
+        "model_call": 1,
+        "tool_calls": [
+          {
+            "name": "get_claim",
+            "arguments": {
+              "claim_id": "CLM-8933"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "get_claim",
+            "ok": true,
+            "result": {
+              "claim_id": "CLM-8933",
+              "member_id": "M-2214",
+              "hospital_id": "H-114",
+              "date_of_service": "2026-08-20",
+              "narrative": "Resubmitting my August appendix claim, I do not think it was received.",
+              "documents": [
+                "itemised_bill",
+                "discharge_summary"
+              ],
+              "lines": [
+                {
+                  "code": "47120",
+                  "amount": 1500
+                }
+              ],
+              "duplicate_of": "CLM-8710"
+            }
+          }
+        ]
+      },
+      {
+        "turn": 1,
+        "model_call": 2,
+        "tool_calls": [],
+        "observations": [
+          {
+            "tool": "lookup_policy",
+            "ok": false,
+            "error": "READ_AFTER_DECISIVE_INTAKE_BLOCKED",
+            "decisive_reason": "duplicate_claim"
+          }
+        ]
+      },
+      {
+        "turn": 1,
+        "model_call": 3,
+        "tool_calls": [],
+        "observations": [
+          {
+            "tool": "check_coverage",
+            "ok": false,
+            "error": "READ_AFTER_DECISIVE_INTAKE_BLOCKED",
+            "decisive_reason": "duplicate_claim"
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "model_call": 4,
+        "tool_calls": [
+          {
+            "name": "issue_decision_letter",
+            "arguments": {
+              "case_id": "CLM-8933",
+              "decision": "escalate",
+              "trigger": "duplicate_claim",
+              "reason": "The claim is an exact duplicate of a previously submitted claim.",
+              "evidence": [
+                {
+                  "source": "get_claim",
+                  "fact": "duplicate_of: CLM-8710"
+                }
+              ],
+              "missing_item": null
+            }
+          }
+        ],
+        "observations": [
+          {
+            "tool": "issue_decision_letter",
+            "ok": false,
+            "error": "Decision action already executed for this case"
+          }
+        ],
+        "governance_cliff": true
+      }
+    ],
+    "guardrail_events": [
+      {
+        "event": "READ_AFTER_DECISIVE_INTAKE_BLOCKED",
+        "decisive_reason": "duplicate_claim",
+        "calls": [
+          {
+            "name": "lookup_policy",
+            "arguments": {
+              "member_id": "M-2214"
+            }
+          }
+        ]
+      },
+      {
+        "event": "READ_AFTER_DECISIVE_INTAKE_BLOCKED",
+        "decisive_reason": "duplicate_claim",
+        "calls": [
+          {
+            "name": "check_coverage",
+            "arguments": {
+              "policy_id": "POL-3310",
+              "procedure_code": "47120"
+            }
+          }
+        ]
+      }
+    ],
+    "gated_action_count": 0
+  },
+  "blocked_duplicate_read": true
+}

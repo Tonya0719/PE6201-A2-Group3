@@ -1,0 +1,22 @@
+{
+  "models": {
+    "openai/gpt-4o-mini": {
+      "tier": "cheap",
+      "family": "OpenAI",
+      "trials": 60,
+      "pass_rate": 0.8,
+      "negative_trials": 30,
+      "negative_pass_rate": 0.7,
+      "median_turns": 4.0,
+      "worst_turns": 5,
+      "cap_hits": 0,
+      "input_tokens": 467798,
+      "output_tokens": 10731,
+      "api_cost": 0.07660829999999998
+    }
+  },
+  "total_cost_usd": 0.07660829999999998,
+  "backend_used": "live",
+  "tool_spec_version": "v2",
+  "price_note": "Re-verify MODEL_PRICES before final submission."
+}

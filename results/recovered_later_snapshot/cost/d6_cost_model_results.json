@@ -1,0 +1,144 @@
+{
+  "assumptions": {
+    "volume": 8000,
+    "failure_cost": 7.6,
+    "monthly_fixed_cost": 0.0
+  },
+  "per_model": [
+    {
+      "model": "amazon/nova-2-lite-v1",
+      "tier": "mid",
+      "family": "Amazon",
+      "pass_rate": 0.5606060606060606,
+      "variable_cost_per_run": 0.004760559090909088,
+      "trials": 66,
+      "price_used": {
+        "price_in_per_m": 0.3,
+        "price_out_per_m": 2.5
+      },
+      "layer1_variable_cost": 0.004760559090909088,
+      "layer2_expected_failure_cost": 3.33939393939394,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 3.344154498484849,
+      "monthly_cost": 26753.235987878794
+    },
+    {
+      "model": "deepseek/deepseek-chat-v3.1",
+      "tier": "cheap",
+      "family": "DeepSeek",
+      "pass_rate": 0.6212121212121212,
+      "variable_cost_per_run": 0.0034996681818181817,
+      "trials": 66,
+      "price_used": {
+        "price_in_per_m": 0.25,
+        "price_out_per_m": 0.95
+      },
+      "layer1_variable_cost": 0.0034996681818181817,
+      "layer2_expected_failure_cost": 2.8787878787878785,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 2.8822875469696965,
+      "monthly_cost": 23058.30037575757
+    },
+    {
+      "model": "google/gemini-2.5-flash",
+      "tier": "mid",
+      "family": "Google",
+      "pass_rate": 0.6818181818181818,
+      "variable_cost_per_run": 0.005243987878787879,
+      "trials": 66,
+      "price_used": {
+        "price_in_per_m": 0.3,
+        "price_out_per_m": 2.5
+      },
+      "layer1_variable_cost": 0.005243987878787879,
+      "layer2_expected_failure_cost": 2.4181818181818184,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 2.423425806060606,
+      "monthly_cost": 19387.40644848485
+    },
+    {
+      "model": "meta-llama/llama-3.3-70b-instruct",
+      "tier": "cheap",
+      "family": "meta",
+      "pass_rate": 0.5606060606060606,
+      "variable_cost_per_run": 0.0011467678787878792,
+      "trials": 66,
+      "price_used": {
+        "price_in_per_m": 0.1,
+        "price_out_per_m": 0.32
+      },
+      "layer1_variable_cost": 0.0011467678787878792,
+      "layer2_expected_failure_cost": 3.33939393939394,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 3.340540707272728,
+      "monthly_cost": 26724.32565818182
+    },
+    {
+      "model": "mistralai/mistral-small-2603",
+      "tier": "cheap",
+      "family": "Mistral",
+      "pass_rate": 0.5151515151515151,
+      "variable_cost_per_run": 0.0026996454545454547,
+      "trials": 66,
+      "price_used": {
+        "price_in_per_m": 0.15,
+        "price_out_per_m": 0.6
+      },
+      "layer1_variable_cost": 0.0026996454545454547,
+      "layer2_expected_failure_cost": 3.6848484848484846,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 3.68754813030303,
+      "monthly_cost": 29500.38504242424
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "tier": "cheap",
+      "family": "OpenAI",
+      "pass_rate": 0.6212121212121212,
+      "variable_cost_per_run": 0.0019089772727272725,
+      "trials": 66,
+      "price_used": {
+        "price_in_per_m": 0.15,
+        "price_out_per_m": 0.6
+      },
+      "layer1_variable_cost": 0.0019089772727272725,
+      "layer2_expected_failure_cost": 2.8787878787878785,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 2.880696856060606,
+      "monthly_cost": 23045.57484848485
+    }
+  ],
+  "sensitivity_model": "google/gemini-2.5-flash",
+  "sensitivity": {
+    "minus_10pp": {
+      "layer1_variable_cost": 0.005243987878787879,
+      "layer2_expected_failure_cost": 3.178181818181818,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 3.183425806060606,
+      "monthly_cost": 25467.40644848485,
+      "success_rate": 0.5818181818181818
+    },
+    "base": {
+      "layer1_variable_cost": 0.005243987878787879,
+      "layer2_expected_failure_cost": 2.4181818181818184,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 2.423425806060606,
+      "monthly_cost": 19387.40644848485,
+      "success_rate": 0.6818181818181818
+    },
+    "plus_10pp": {
+      "layer1_variable_cost": 0.005243987878787879,
+      "layer2_expected_failure_cost": 1.6581818181818186,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 1.6634258060606064,
+      "monthly_cost": 13307.406448484851,
+      "success_rate": 0.7818181818181817
+    }
+  },
+  "break_even": {
+    "cheapest_model": "meta-llama/llama-3.3-70b-instruct",
+    "most_reliable_model": "google/gemini-2.5-flash",
+    "break_even_success_rate": 0.6812790739234449,
+    "cheapest_clears_break_even": false
+  }
+}
