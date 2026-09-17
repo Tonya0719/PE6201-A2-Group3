@@ -35,6 +35,7 @@ MODELS = [
     # ("deepseek/deepseek-chat-v3.1", "cheap", "DeepSeek"), #ZHOU YIHAN
     # ("meta-llama/llama-3.3-70b-instruct", "cheap", "Meta"),#JIAO YUXI
     # ("mistralai/mistral-small-2603", "cheap", "Mistral"),#MA JIAN
+    # ("qwen/qwen3-30b-a3b-instruct-2507", "cheap", "Qwen"),  # WU YUSHAN
 ]
 
 # Provisional recovered prices: (input USD/M tokens, output USD/M tokens).
@@ -45,6 +46,7 @@ MODEL_PRICES = {
     "deepseek/deepseek-chat-v3.1": (0.25, 0.95),#ZHOU YIHAN
     "meta-llama/llama-3.3-70b-instruct": (0.10, 0.32),#JIAO YUXI
     "mistralai/mistral-small-2603": (0.15, 0.60),#MA JIAN
+    "qwen/qwen3-30b-a3b-instruct-2507": (0.048, 0.19),  # WU YUSHAN
 }
 
 PER_MODEL_BUDGET_WARNING_USD = 3.00
