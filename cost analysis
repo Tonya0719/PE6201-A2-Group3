@@ -1,0 +1,693 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""D6 成本核算：已填入 mock numbers for costs mode.xlsx 的数据。
+
+使用 Python 3.9+，仅用标准库，不需要 Excel 或原 cost_analysis.py。
+运行：python3 cost_analysis_complete.py
+导出：python3 cost_analysis_complete.py --json cost_results.json
+精确口径：python3 cost_analysis_complete.py --basis notes_exact
+自定假设：python3 cost_analysis_complete.py --fixed-cost 100 --volume 8000
+
+默认采用 Excel D 列显示值，notes_exact 使用 F 列总量/66。
+原文件的四个计算函数及默认值保留；补充校验、配置、ledger 和输出。
+按组员说明修订：Layer3按零固定成本假设；T比较轮数/调用次数；
+D采用d2b_v1_vs_v2.md中目标工具的平均返回大小；P比较六个模型中的最低/最高通过率。
+B采用four_levers_summary.json中的D2(a) shortest defensible tool set / tried-not-adding估算证据；B/D的tokens均为chars/4估算，非权威API usage。
+所有成本均为 USD。价格只是表中快照，未联网核实。
+文件名包含 mock，且未提供原始运行记录；不能将此文件当作实测验证。
+"""
+
+import argparse
+import json
+import math
+from pathlib import Path
+
+
+# 原始工作表的 A:F 全部非空数据（含表头），按行号保存，便于核对。
+SOURCE_WORKBOOK = "mock numbers for costs mode.xlsx"
+SOURCE_SHEET = "Sheet1"
+EXCEL_ROWS = {'1': ['Data needed', 'Owner / source', 'D6 purpose', 'Value', 'Unit / format', 'Notes'],
+ '2': ["Each model's input tokens",
+       'D5',
+       'Layer 1',
+       11147.4,
+       'tokens/task; non-negative',
+       'Model: openai/gpt-4o-mini; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x '
+       'negative), scripted-grading harness; total_input_tokens=735726 / 66 trials'],
+ '3': ["Each model's input tokens",
+       'D5',
+       'Layer 1',
+       11437.1,
+       'tokens/task; non-negative',
+       'Model: amazon/nova-2-lite-v1; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, '
+       '3x negative), scripted-grading harness; total_input_tokens=754848 / 66 trials'],
+ '4': ["Each model's input tokens",
+       'D5',
+       'Layer 1',
+       12181.3,
+       'tokens/task; non-negative',
+       'Model: google/gemini-2.5-flash; 40-case eval set (27 positive / 13 negative), 66 trials (1x '
+       'positive, 3x negative), scripted-grading harness; total_input_tokens=803969 / 66 trials'],
+ '5': ["Each model's input tokens",
+       'D5',
+       'Layer 1',
+       11935.8,
+       'tokens/task; non-negative',
+       'Model: deepseek/deepseek-chat-v3.1; 40-case eval set (27 positive / 13 negative), 66 trials (1x '
+       'positive, 3x negative), scripted-grading harness; total_input_tokens=787766 / 66 trials'],
+ '6': ["Each model's input tokens",
+       'D5',
+       'Layer 1',
+       10326.9,
+       'tokens/task; non-negative',
+       'Model: meta-llama/llama-3.3-70b-instruct; 40-case eval set (27 positive / 13 negative), 66 trials '
+       '(1x positive, 3x negative), scripted-grading harness; total_input_tokens=681574 / 66 trials'],
+ '7': ["Each model's input tokens",
+       'D5',
+       'Layer 1',
+       11962.4,
+       'tokens/task; non-negative',
+       'Model: mistralai/mistral-small-2603; 40-case eval set (27 positive / 13 negative), 66 trials (1x '
+       'positive, 3x negative), scripted-grading harness; total_input_tokens=789520 / 66 trials'],
+ '8': ["Each model's output tokens",
+       'D5',
+       'Layer 1',
+       394.8,
+       'tokens/task; non-negative',
+       'Model: openai/gpt-4o-mini; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x '
+       'negative), scripted-grading harness; total_output_tokens=26056 / 66 trials'],
+ '9': ["Each model's output tokens",
+       'D5',
+       'Layer 1',
+       531.8,
+       'tokens/task; non-negative',
+       'Model: amazon/nova-2-lite-v1; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, '
+       '3x negative), scripted-grading harness; total_output_tokens=35097 / 66 trials'],
+ '10': ["Each model's output tokens",
+        'D5',
+        'Layer 1',
+        635.8,
+        'tokens/task; non-negative',
+        'Model: google/gemini-2.5-flash; 40-case eval set (27 positive / 13 negative), 66 trials (1x '
+        'positive, 3x negative), scripted-grading harness; total_output_tokens=41965 / 66 trials'],
+ '11': ["Each model's output tokens",
+        'D5',
+        'Layer 1',
+        542.8,
+        'tokens/task; non-negative',
+        'Model: deepseek/deepseek-chat-v3.1; 40-case eval set (27 positive / 13 negative), 66 trials (1x '
+        'positive, 3x negative), scripted-grading harness; total_output_tokens=35828 / 66 trials'],
+ '12': ["Each model's output tokens",
+        'D5',
+        'Layer 1',
+        356.5,
+        'tokens/task; non-negative',
+        'Model: meta-llama/llama-3.3-70b-instruct; 40-case eval set (27 positive / 13 negative), 66 trials '
+        '(1x positive, 3x negative), scripted-grading harness; total_output_tokens=23529 / 66 trials'],
+ '13': ["Each model's output tokens",
+        'D5',
+        'Layer 1',
+        1508.8,
+        'tokens/task; non-negative',
+        'Model: mistralai/mistral-small-2603; 40-case eval set (27 positive / 13 negative), 66 trials (1x '
+        'positive, 3x negative), scripted-grading harness; total_output_tokens=99581 / 66 trials'],
+ '14': ["Each model's success/pass rate",
+        'D4/D5',
+        'Layer 2',
+        '62.1%',
+        'percentage, e.g. 85%',
+        'Model: openai/gpt-4o-mini; 41/66 passed; pass criteria: strict match on decision + '
+        'trigger/missing_item + exactly one gated write (see grade_run())'],
+ '15': ["Each model's success/pass rate",
+        'D4/D5',
+        'Layer 2',
+        '56.1%',
+        'percentage, e.g. 85%',
+        'Model: amazon/nova-2-lite-v1; 37/66 passed; pass criteria: strict match on decision + '
+        'trigger/missing_item + exactly one gated write (see grade_run())'],
+ '16': ["Each model's success/pass rate",
+        'D4/D5',
+        'Layer 2',
+        '68.2%',
+        'percentage, e.g. 85%',
+        'Model: google/gemini-2.5-flash; 45/66 passed; pass criteria: strict match on decision + '
+        'trigger/missing_item + exactly one gated write (see grade_run())'],
+ '17': ["Each model's success/pass rate",
+        'D4/D5',
+        'Layer 2',
+        '62.1%',
+        'percentage, e.g. 85%',
+        'Model: deepseek/deepseek-chat-v3.1; 41/66 passed; pass criteria: strict match on decision + '
+        'trigger/missing_item + exactly one gated write (see grade_run())'],
+ '18': ["Each model's success/pass rate",
+        'D4/D5',
+        'Layer 2',
+        '56.1%',
+        'percentage, e.g. 85%',
+        'Model: meta-llama/llama-3.3-70b-instruct; 37/66 passed; pass criteria: strict match on decision + '
+        'trigger/missing_item + exactly one gated write (see grade_run())'],
+ '19': ["Each model's success/pass rate",
+        'D4/D5',
+        'Layer 2',
+        '51.5%',
+        'percentage, e.g. 85%',
+        'Model: mistralai/mistral-small-2603; 34/66 passed; pass criteria: strict match on decision + '
+        'trigger/missing_item + exactly one gated write (see grade_run())'],
+ '20': ['Model input/output token price',
+        'D5/model config',
+        'Layer 1',
+        'input=$0.15/M; output=$0.6/M',
+        'input=value; output=value',
+        'Model: openai/gpt-4o-mini; currency: USD; source: OpenRouter pricing (see run_live_battery.py '
+        'MODEL_PRICES; verify current price and date yourself)'],
+ '21': ['Model input/output token price',
+        'D5/model config',
+        'Layer 1',
+        'input=$0.3/M; output=$2.5/M',
+        'input=value; output=value',
+        'Model: amazon/nova-2-lite-v1; currency: USD; source: OpenRouter pricing (see run_live_battery.py '
+        'MODEL_PRICES; verify current price and date yourself)'],
+ '22': ['Model input/output token price',
+        'D5/model config',
+        'Layer 1',
+        'input=$0.3/M; output=$2.5/M',
+        'input=value; output=value',
+        'Model: google/gemini-2.5-flash; currency: USD; source: OpenRouter pricing (see run_live_battery.py '
+        'MODEL_PRICES; verify current price and date yourself)'],
+ '23': ['Model input/output token price',
+        'D5/model config',
+        'Layer 1',
+        'input=$0.25/M; output=$0.95/M',
+        'input=value; output=value',
+        'Model: deepseek/deepseek-chat-v3.1; currency: USD; source: OpenRouter pricing (see '
+        'run_live_battery.py MODEL_PRICES; verify current price and date yourself)'],
+ '24': ['Model input/output token price',
+        'D5/model config',
+        'Layer 1',
+        'input=$0.1/M; output=$0.32/M',
+        'input=value; output=value',
+        'Model: meta-llama/llama-3.3-70b-instruct; currency: USD; source: OpenRouter pricing (see '
+        'run_live_battery.py MODEL_PRICES; verify current price and date yourself)'],
+ '25': ['Model input/output token price',
+        'D5/model config',
+        'Layer 1',
+        'input=$0.15/M; output=$0.6/M',
+        'input=value; output=value',
+        'Model: mistralai/mistral-small-2603; currency: USD; source: OpenRouter pricing (see '
+        'run_live_battery.py MODEL_PRICES; verify current price and date yourself)'],
+ '26': ['Original tool definition tokens',
+        'D2(a)',
+        'Lever 1',
+        657,
+        'tokens; non-negative integer',
+        'Tokenizer: estimated at ~4 chars/token (tiktoken unavailable offline); tool set version: '
+        'TOOL_SPECS_V2 (5 tools)'],
+ '27': ['Tool tokens after removing tools',
+        'D2(a)',
+        'Lever 1',
+        838,
+        'tokens; non-negative integer',
+        "Note: this is the reverse scenario - we didn't remove tools, we estimated what adding back "
+        'check_hospital_panel and check_missing_documents as real tools would cost (+27.5%). The actual '
+        'decision was to keep them as plain Python functions, not agent tools.'],
+ '28': ['Sequential turns/tokens',
+        'D2(c)',
+        'Lever 2',
+        'turns=258 (4.300000/task); input_tokens=572663; output_tokens=125088; api_cost=0.10730150000000001',
+        'turns=value; input_tokens=value; output_tokens=value; api_cost=USD',
+        'User-provided 60-trial live comparison; trials=60; pass_rate=0.7333333333333333; negative_pass_rate=0.6333333333333333; median_turns=4.0; worst_turns=7; tool_turns=258; model_calls=343; input_tokens=572663; output_tokens=125088; api_cost=0.10730150000000001; total_tool_calls=258; avg_tool_calls_per_turn=1.0; batched_turns=0; max_tool_calls_in_one_turn=1; cap_hits=2'],
+ '29': ['Parallel/batched turns/tokens',
+        'D2(c)',
+        'Lever 2',
+        'turns=236 (3.933333/task); input_tokens=535996; output_tokens=13171; api_cost=0.058868',
+        'turns=value; input_tokens=value; output_tokens=value; api_cost=USD',
+        'User-provided 60-trial live comparison; trials=60; pass_rate=0.8333333333333334; negative_pass_rate=0.6666666666666666; median_turns=4.0; worst_turns=6; tool_turns=236; model_calls=327; input_tokens=535996; output_tokens=13171; api_cost=0.058868; total_tool_calls=261; avg_tool_calls_per_turn=1.1059322033898304; batched_turns=15; max_tool_calls_in_one_turn=4; cap_hits=0'],
+ '30': ['v1 observation tokens/call',
+        'D2(b)',
+        'Lever 3',
+        9258.2,
+        'tokens/call; non-negative',
+        "Note: this is a per-task average, not per-call. Our records don't have single-tool-call "
+        'granularity, only the full 66-trial batch total (611,040 input tokens). Model: deepseek-chat-v3.1; '
+        '40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), '
+        'scripted-grading harness'],
+ '31': ['v2 observation tokens/call',
+        'D2(b)',
+        'Lever 3',
+        11935.8,
+        'tokens/call; non-negative',
+        'Note: same as above, per-task average not per-call. Model: deepseek-chat-v3.1 (same model/task set '
+        'as v1); total_input_tokens=787,766 / 66 trials'],
+ '32': ['Final evaluation pass rate',
+        'D4',
+        'Lever 4',
+        '68.2%',
+        'percentage, e.g. 85%',
+        "Configuration: google/gemini-2.5-flash (D6's best cost-per-success model); 45/66 passed; 40-case "
+        'eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading '
+        'harness'],
+ '33': ['Step cap',
+        'Agent/guardrail owner',
+        'Final deployment parameter',
+        8,
+        'steps/task; positive integer',
+        'Source: src/config.py STEP_CAP=8; counting method: each model turn counts as one step (including '
+        'the final judgment turn that calls issue_decision_letter)'],
+ '34': ['Budget ceiling',
+        'Agent/guardrail owner',
+        'Final deployment parameter',
+        '$0.10',
+        'amount; non-negative',
+        'Source: src/config.py BUDGET_USD=0.10; scope: per task/claim, not per user or per month'],
+ '35': ['Monthly user limit',
+        'Team decision',
+        'Final deployment parameter',
+        '8,000 (proposed)',
+        'non-negative integer; scope per notes',
+        'Scope: total claims/tasks processed per month (not number of users). Proposal: reuse the 8,000 '
+        'claims/month assumption already used in the D6 cost model, for consistency across the report. This '
+        'is a proposal, needs team confirmation.']}
+
+# 作业口径及团队假设；保留原始EXCEL_ROWS，不改写来源记录。
+CONFIG = {
+    "monthly_volume": 8000,          # D35：月任务量提案，不是用户人数
+    "failure_cost": 7.60,            # 沿用Problem A假设：38 USD/hour × 12/60 hour
+    "monthly_fixed_cost": 0.0,       # 组员提出：当前项目无独立托管/服务器费用，按零假设
+    "tool_fee": 0.0,                 # 原 Python 默认；Excel 缺失，每任务
+    "sensitivity_delta": 0.10,       # 原 Python 的 ±10 个百分点
+}
+
+ASSUMPTIONS = {
+    "source": "用户提供的组员说明截图；原始Excel逐行保留于source.rows",
+    "layer3": {
+        "default_usd_per_month": 0.0,
+        "status": "team_zero_fixed_cost_assumption",
+        "basis": "当前项目直接调用API，未报告独立托管/服务器或其他固定费用，按总固定费用为零建模。",
+        "scope": "不代表生产部署天然零成本；未取得维护等逐项报价，且未核验课程是否指定其他固定成本。",
+    },
+    "failure_cost": "沿用Problem A每次失败7.60 USD（38 USD/hour × 12/60 hour）。",
+    "tool_fee": "沿用每任务0 USD的额外工具费用假设；模型API费用已计入Layer1。",
+    "monthly_volume": "沿用8000 claims/month；不等于每用户月额度。",
+}
+
+# 这些参数属于 Agent 部署控制，成本核算不负责执行限额。
+DEPLOYMENT = {
+    "step_cap": 8,                   # D33；src/config.py STEP_CAP
+    "budget_ceiling_usd_per_task": 0.10,  # D34；src/config.py BUDGET_USD
+    "monthly_task_limit_proposed": 8000,  # D35；团队尚待确认
+    "monthly_limit_per_user": 100,  # 用户确定：每用户每月最多100个理赔任务
+    "scope": "预算上限按每个 claim/task；每用户月限额为100个理赔任务；8000为总月任务量提案",
+}
+
+MODELS = [
+    {"model": "openai/gpt-4o-mini", "input_tokens": 11147.4,
+     "output_tokens": 394.8, "success_rate": 0.621,
+     "price_in_per_m": 0.15, "price_out_per_m": 0.60,
+     "total_input_tokens": 735726, "total_output_tokens": 26056,
+     "passed": 41, "trials": 66, "cells": ["D2", "D8", "D14", "D20"]},
+    {"model": "amazon/nova-2-lite-v1", "input_tokens": 11437.1,
+     "output_tokens": 531.8, "success_rate": 0.561,
+     "price_in_per_m": 0.30, "price_out_per_m": 2.50,
+     "total_input_tokens": 754848, "total_output_tokens": 35097,
+     "passed": 37, "trials": 66, "cells": ["D3", "D9", "D15", "D21"]},
+    {"model": "google/gemini-2.5-flash", "input_tokens": 12181.3,
+     "output_tokens": 635.8, "success_rate": 0.682,
+     "price_in_per_m": 0.30, "price_out_per_m": 2.50,
+     "total_input_tokens": 803969, "total_output_tokens": 41965,
+     "passed": 45, "trials": 66, "cells": ["D4", "D10", "D16", "D22"]},
+    {"model": "deepseek/deepseek-chat-v3.1", "input_tokens": 11935.8,
+     "output_tokens": 542.8, "success_rate": 0.621,
+     "price_in_per_m": 0.25, "price_out_per_m": 0.95,
+     "total_input_tokens": 787766, "total_output_tokens": 35828,
+     "passed": 41, "trials": 66, "cells": ["D5", "D11", "D17", "D23"]},
+    {"model": "meta-llama/llama-3.3-70b-instruct", "input_tokens": 10326.9,
+     "output_tokens": 356.5, "success_rate": 0.561,
+     "price_in_per_m": 0.10, "price_out_per_m": 0.32,
+     "total_input_tokens": 681574, "total_output_tokens": 23529,
+     "passed": 37, "trials": 66, "cells": ["D6", "D12", "D18", "D24"]},
+    {"model": "mistralai/mistral-small-2603", "input_tokens": 11962.4,
+     "output_tokens": 1508.8, "success_rate": 0.515,
+     "price_in_per_m": 0.15, "price_out_per_m": 0.60,
+     "total_input_tokens": 789520, "total_output_tokens": 99581,
+     "passed": 34, "trials": 66, "cells": ["D7", "D13", "D19", "D25"]},
+]
+
+NOTES = [
+    "数据来自上传的 mock Excel；未读取或验证原始 harness 运行日志。",
+    "66 trials = 27 个正面案例各 1 次 + 13 个负面案例各 3 次；P 是 trial 加权通过率。",
+    "默认使用 D 列已舍入数据；notes_exact 使用 F 列总 tokens/66 及 passed/66。",
+    "模型价格来自 Excel 所述 OpenRouter 配置快照，无核实日期。",
+    "failure_cost默认7.60沿用Problem A；fixed_cost默认0采用组员的项目范围假设；tool_fee默认0仍为假设。实际运行值见config。",
+    "月业务量 8000 来自 D35 提案；成本外推沿用测试样本权重，未校准生产分布。",
+    "cost_per_successful_task 为兼容原代码的字段名，实际为每提交任务模型费+预期失败费。",
+    "单位成本没有除以 P；月固定成本仅在月总成本中加一次；另提供含固定分摊单位成本。",
+    "失败费模型假设每次失败产生一次给定费用；不模拟重试或证明人工兜底一定成功。",
+    "B/T/D 的对比不叠加到表中模型token成本，避免重复计算；表中数字不因本次修订而变成live实测。",
+    "T采用用户提供的60-trial live sequential vs batched对比，记录实测turns、tokens和API费用；降幅及每任务API节省自动计算。pass rate从73.33%变为83.33%，不能假设correctness不变或将全部差异归因于轮数减少。",
+    "D采用d2b_v1_vs_v2.md中get_preauthorisation平均返回大小：34→31估算tokens/call，减少8.82%；V1/V2观察到24/21次调用。不是整任务input tokens，不推算美元节省。",
+    "P按不同模型的最低/最高通过率比较，不再要求同一模型修改前后的P。",
+    "B采用four_levers_summary.json的D2(a) shortest defensible tool set / tried-not-adding估算证据：假设7 tools→实际5 tools，579→449 estimated tokens，每轮减少130 tokens，reduction=(579-449)/579≈22.45%。measurement_note: model-agnostic ceil(characters/4) estimate。B/D使用chars/4估算，provider-reported model input/output token usage才是权威API usage；原Excel对应行仅作历史来源。",
+    "每用户月限额设为100个理赔任务；8000只代表总月任务量，不是每用户额度。",
+    "step cap 和 budget ceiling 仅保存部署配置，不能由平均成本证明每次运行符合上限。",
+]
+
+
+def _nonnegative(name, value):
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise ValueError(f"{name} 必须为数字")
+    if not math.isfinite(value) or value < 0:
+        raise ValueError(f"{name} 必须是有限非负数")
+
+
+def _rate(value):
+    _nonnegative("success_rate", value)
+    if value > 1:
+        raise ValueError("success_rate 必须在 0 到 1 之间，例如 0.682")
+
+
+def calculate_run_cost(input_tokens, output_tokens, price_in_per_m,
+                       price_out_per_m, tool_fee=0.0):
+    """Layer 1；输入为每任务 token 和 USD/百万 token 单价。"""
+    for name, value in locals().copy().items():
+        _nonnegative(name, value)
+    return (input_tokens / 1_000_000 * price_in_per_m
+            + output_tokens / 1_000_000 * price_out_per_m + tool_fee)
+
+
+def build_cost_summary(success_rate, variable_cost_per_run,
+                       monthly_fixed_cost=0.0, monthly_volume=8000,
+                       failure_cost=7.60):
+    _rate(success_rate)
+    for name in ("variable_cost_per_run", "monthly_fixed_cost",
+                 "monthly_volume", "failure_cost"):
+        _nonnegative(name, locals()[name])
+    expected_failure_cost = (1 - success_rate) * failure_cost
+    unit_cost = variable_cost_per_run + expected_failure_cost
+    monthly_cost = unit_cost * monthly_volume + monthly_fixed_cost
+    return {
+        "layer1_variable_cost": variable_cost_per_run,
+        "layer2_expected_failure_cost": expected_failure_cost,
+        "layer3_monthly_fixed_cost": monthly_fixed_cost,
+        "cost_per_successful_task": unit_cost,  # 兼容原代码，见模块说明
+        "expected_cost_per_submitted_task": unit_cost,
+        "monthly_cost": monthly_cost,
+        "monthly_model_and_tool_cost": variable_cost_per_run * monthly_volume,
+        "monthly_expected_failure_cost": expected_failure_cost * monthly_volume,
+        "unit_cost_including_fixed": (monthly_cost / monthly_volume
+                                      if monthly_volume else None),
+    }
+
+
+def sensitivity(success_rate, variable_cost_per_run, monthly_fixed_cost=0.0,
+                monthly_volume=8000, failure_cost=7.60, delta=0.10):
+    """只变动 P；固定 token 消耗、单价和其他费用。"""
+    _rate(success_rate)
+    _nonnegative("delta", delta)
+    out = {}
+    for label, rate in (("minus_10pp", max(0, success_rate - delta)),
+                        ("base", success_rate),
+                        ("plus_10pp", min(1, success_rate + delta))):
+        # 默认保留原函数键名；自定义幅度时避免键名误导。
+        if delta != 0.10:
+            label = {"minus_10pp": "lower", "plus_10pp": "upper"}.get(label, label)
+        out[label] = build_cost_summary(rate, variable_cost_per_run,
+                                        monthly_fixed_cost, monthly_volume, failure_cost)
+        out[label]["success_rate"] = rate
+    return out
+
+
+def break_even_success_rate(cheap_variable_cost, expensive_all_in_success_cost,
+                            failure_cost=7.60):
+    """比较 Layer1+(1-P)*F；参照成本不含固定分摊，需双方固定成本相同。"""
+    for name, value in locals().copy().items():
+        _nonnegative(name, value)
+    if failure_cost == 0:
+        raise ValueError("failure_cost=0 时成本与 P 无关，不存在唯一成功率临界点")
+    return 1 - (expensive_all_in_success_cost - cheap_variable_cost) / failure_cost
+
+
+def lever_ledger(basis, results, config=None):
+    """输出B工具定义估算、T调用数、D目标工具返回大小估算及P跨模型比较。"""
+    cfg = dict(CONFIG)
+    if config:
+        cfg.update(config)
+    # B/D使用报告中的相同估算值；notes_exact不会把chars/4估算变成精确API tokens。
+    baseline_model = min(results, key=lambda name: results[name]["success_rate"])
+    best_model = max(results, key=lambda name: results[name]["success_rate"])
+    baseline, best = results[baseline_model], results[best_model]
+    failure_saving = baseline["layer2_expected_failure_cost"] - best["layer2_expected_failure_cost"]
+    total_saving = baseline["expected_cost_per_submitted_task"] - best["expected_cost_per_submitted_task"]
+    sequential = {
+        "trials": 60,
+        "pass_rate": 0.7333333333333333,
+        "negative_pass_rate": 0.6333333333333333,
+        "median_turns": 4.0,
+        "worst_turns": 7,
+        "tool_turns": 258,
+        "model_calls": 343,
+        "input_tokens": 572663,
+        "output_tokens": 125088,
+        "api_cost": 0.10730150000000001,
+        "total_tool_calls": 258,
+        "avg_tool_calls_per_turn": 1.0,
+        "batched_turns": 0,
+        "max_tool_calls_in_one_turn": 1,
+        "cap_hits": 2,
+    }
+    batched = {
+        "trials": 60,
+        "pass_rate": 0.8333333333333334,
+        "negative_pass_rate": 0.6666666666666666,
+        "median_turns": 4.0,
+        "worst_turns": 6,
+        "tool_turns": 236,
+        "model_calls": 327,
+        "input_tokens": 535996,
+        "output_tokens": 13171,
+        "api_cost": 0.058868,
+        "total_tool_calls": 261,
+        "avg_tool_calls_per_turn": 1.1059322033898304,
+        "batched_turns": 15,
+        "max_tool_calls_in_one_turn": 4,
+        "cap_hits": 0,
+    }
+    return {
+        "B": {
+            "source": "four_levers_summary.json — lever_1_tool_block_size",
+            "status": "reported_d2a_tool_selection_with_estimated_tokens",
+            "metric": "完整工具定义块（Full tool-spec），7-tool before → 5-tool after (estimated tokens)",
+            "built_in": "D2(a) shortest defensible tool set",
+            # D2(a) shortest defensible tool set / tried-not-adding 的估算证据。
+            # before是假设加回未加入工具的7-tool方案；after是实际5-tool方案。
+            "actual_agent_visible_tools": 5,
+            "hypothetical_agent_visible_tools": 7,
+            "actual_5_tool_spec_tokens_est": 449,
+            "hypothetical_7_tool_spec_tokens_est": 579,
+            "increase_tokens_per_turn_est": 130,
+            "measurement_note": "model-agnostic ceil(characters/4) estimate",
+            "token_estimation_method": "ceil(characters/4)",
+            # 579 → 449 estimated tokens；不是tokenizer精确计数。
+            "before_estimated_tool_tokens": 579,
+            "after_estimated_tool_tokens": 449,
+            "reduction_tokens_per_turn": 130,
+            "reduction_pct": (579 - 449) / 579 * 100,
+            "tokens_saved_per_tool_block": 579 - 449,
+            "reduction_fraction": (579 - 449) / 579,
+            # Provider-reported model input/output token usage才是权威API usage。
+            # 本B估算不替换D5 usage、不重算Layer1，也不推算美元节省。
+            "cost_saving_per_task": None,
+            "note": "D2(a) shortest defensible tool set / tried-not-adding：假设7个Agent可见工具的定义块为579 estimated tokens，实际保留5个工具为449 estimated tokens，每轮减少130 tokens，按(579-449)/579计算减少约22.45%。measurement_note: model-agnostic ceil(characters/4) estimate。属于工具选择的估算证据，不是D2(b) descriptor rewrite或精确API token实测。旧Excel 657/838仅留作历史来源记录。",
+        },
+        "T": {
+            "source": "用户提供的60-trial live sequential vs batched comparison",
+            "status": "reported_live_turn_token_cost_comparison",
+            "metric": "顺序vs并行/batched的工具轮数、模型调用次数、tokens及API费用",
+            "backend": "live",
+            "sequential": sequential, "batched": batched,
+            "trials": sequential["trials"],
+            "sequential_total_turns": sequential["tool_turns"],
+            "parallel_total_turns": batched["tool_turns"],
+            "sequential_turns_per_task": sequential["tool_turns"] / sequential["trials"],
+            "parallel_turns_per_task": batched["tool_turns"] / batched["trials"],
+            "displayed_turns_per_task": [round(d["tool_turns"] / d["trials"], 2)
+                                         for d in (sequential, batched)],
+            "sequential_model_calls": sequential["model_calls"],
+            "parallel_model_calls": batched["model_calls"],
+            "model_calls_per_task": [d["model_calls"] / d["trials"] for d in (sequential, batched)],
+            "turn_reduction_fraction": (sequential["tool_turns"] - batched["tool_turns"]) / sequential["tool_turns"],
+            "turns_saved_total": sequential["tool_turns"] - batched["tool_turns"],
+            "model_calls_saved_total": sequential["model_calls"] - batched["model_calls"],
+            "model_call_reduction_fraction": (sequential["model_calls"] - batched["model_calls"]) / sequential["model_calls"],
+            # 顺序均为sequential、batched；input/output分别记录，避免混用。
+            "source_reported_tokens": [sequential["input_tokens"], batched["input_tokens"]],
+            "measured_tokens": {
+                "input_tokens": [sequential["input_tokens"], batched["input_tokens"]],
+                "output_tokens": [sequential["output_tokens"], batched["output_tokens"]],
+            },
+            "input_token_reduction_fraction": (sequential["input_tokens"] - batched["input_tokens"]) / sequential["input_tokens"],
+            "output_token_reduction_fraction": (sequential["output_tokens"] - batched["output_tokens"]) / sequential["output_tokens"],
+            "api_cost_reduction_fraction": (sequential["api_cost"] - batched["api_cost"]) / sequential["api_cost"],
+            "cost_saving_per_task": sequential["api_cost"] / sequential["trials"] - batched["api_cost"] / batched["trials"],
+            "pass_rate_gain_pp": 100 * (batched["pass_rate"] - sequential["pass_rate"]),
+            "negative_pass_rate_gain_pp": 100 * (batched["negative_pass_rate"] - sequential["negative_pass_rate"]),
+            "note": "采用用户提供的60-trial live对比数据；parallel对应batched。total_turns使用tool_turns，区别于model_calls和total_tool_calls。pass rate从73.33%升至83.33%，correctness并非不变；运行路径变化，不能将全部通过率、token或费用差异仅归因于轮数减少。cost_saving_per_task仅为实测API费用差额除以各自trials，不改变Layer 1/2/3或其他lever。cap_hits仅为本对比的观测结果，不修改部署caps。",
+        },
+        "D": {
+            "source": "d2b_v1_vs_v2.md — Main results / Measurement notes",
+            "status": "reported_observation_chars_with_estimated_tokens",
+            "metric": "get_preauthorisation每次调用的平均返回大小（observation），V1 → V2",
+            "model": "meta-llama/llama-3.3-70b-instruct",
+            "backend": "live",
+            "target_tool": "get_preauthorisation",
+            "v1_calls_observed": 24,
+            "v2_calls_observed": 21,
+            "v1_avg_return_chars_per_call": 133.5,
+            "v2_avg_return_chars_per_call": 121.66666666666667,
+            # 直接采用报告的Avg estimated return tokens/call；不能用整任务input tokens替代。
+            # 原报告token估算方法为ceil(chars/4)，这里保存的是其报告的平均值。
+            # 未取得逐调用原始记录；不把对平均字符数取ceil当作逐调用估算后求平均的验证。
+            "token_estimation_method": "ceil(chars / 4); per-call averages as reported",
+            "v1_avg_estimated_return_tokens_per_call": 34.0,
+            "v2_avg_estimated_return_tokens_per_call": 31.0,
+            "estimated_tokens_saved_per_call": 34.0 - 31.0,
+            "estimated_token_reduction_fraction": (34.0 - 31.0) / 34.0,
+            "avg_return_chars_saved_per_call": 133.5 - 121.66666666666667,
+            "return_char_reduction_fraction": (133.5 - 121.66666666666667) / 133.5,
+            # Provider-reported model input/output token usage才是权威API usage。
+            # observation的chars/4估算不是计费token数；后续上下文重发及轨迹也影响费用。
+            "cost_saving_per_task": None,
+            "note": "采用报告中目标工具的平均返回大小，不代表所有工具的平均observation。V1/V2分别观察到24/21次调用，样本并非逐调用配对；tokens是chars/4估算，非精确tokenizer或provider usage。provider-reported model input/output token usage是权威API usage。不能由每次返回减少3个估算tokens直接推算整任务或月度美元节省。原Excel D30:D31仅留作历史来源，不再用于D。",
+        },
+        "P": {
+            "source": "D14:D19/F14:F19及MODELS价格和tokens；组员说明",
+            "status": "cross_model_lowest_vs_highest_pass_rate",
+            "baseline_model": baseline_model, "comparison_model": best_model,
+            "baseline_success_rate": baseline["success_rate"],
+            "comparison_success_rate": best["success_rate"],
+            "success_rate_gain_pp": 100 * (best["success_rate"] - baseline["success_rate"]),
+            "failure_cost_per_failure": cfg["failure_cost"],
+            "baseline_layer2_per_task": baseline["layer2_expected_failure_cost"],
+            "comparison_layer2_per_task": best["layer2_expected_failure_cost"],
+            "failure_cost_saving_per_task": failure_saving,
+            "monthly_failure_cost_saving": failure_saving * cfg["monthly_volume"],
+            "layer1_cost_increase_per_task": best["layer1_variable_cost"] - baseline["layer1_variable_cost"],
+            "baseline_total_cost_per_task": baseline["expected_cost_per_submitted_task"],
+            "comparison_total_cost_per_task": best["expected_cost_per_submitted_task"],
+            "total_cost_saving_per_task": total_saving,
+            "monthly_total_cost_saving": total_saving * cfg["monthly_volume"],
+            "note": "比较最低与最高P模型（当前为Mistral与Gemini），不是同一模型改动前后。总费用差额同时计入各自Layer1；表中来源尚未经过原始日志核实。",
+        },
+    }
+
+
+def analyze(basis="displayed", config=None):
+    if basis not in ("displayed", "notes_exact"):
+        raise ValueError("basis 应为 displayed 或 notes_exact")
+    cfg = dict(CONFIG)
+    if config:
+        unknown = set(config) - set(cfg)
+        if unknown:
+            raise ValueError(f"未知配置项: {sorted(unknown)}")
+        cfg.update(config)
+    for name, value in cfg.items():
+        _nonnegative(name, value)
+    results, scenarios = {}, {}
+    for model in MODELS:
+        tin, tout, p = (model["input_tokens"], model["output_tokens"], model["success_rate"])
+        if basis == "notes_exact":
+            tin = model["total_input_tokens"] / model["trials"]
+            tout = model["total_output_tokens"] / model["trials"]
+            p = model["passed"] / model["trials"]
+        variable = calculate_run_cost(tin, tout, model["price_in_per_m"],
+                                      model["price_out_per_m"], cfg["tool_fee"])
+        common = {k: cfg[k] for k in ("monthly_fixed_cost", "monthly_volume", "failure_cost")}
+        summary = build_cost_summary(p, variable, **common)
+        summary.update({"input_tokens": tin, "output_tokens": tout, "success_rate": p,
+                        "price_in_per_m": model["price_in_per_m"],
+                        "price_out_per_m": model["price_out_per_m"], "source_cells": model["cells"]})
+        results[model["model"]] = summary
+        scenarios[model["model"]] = sensitivity(p, variable, delta=cfg["sensitivity_delta"], **common)
+
+    ordered = sorted(results, key=lambda name: results[name]["layer1_variable_cost"])
+    pairs = []
+    for i, cheap in enumerate(ordered):
+        for expensive in ordered[i + 1:]:
+            c, e = results[cheap], results[expensive]
+            threshold = None
+            if cfg["failure_cost"]:
+                threshold = break_even_success_rate(c["layer1_variable_cost"],
+                                                   e["expected_cost_per_submitted_task"],
+                                                   cfg["failure_cost"])
+                status = ("all_valid_rates" if threshold < 0 else
+                          "unattainable" if threshold > 1 else "feasible")
+            else:
+                status = "independent_of_success_rate"
+            pairs.append({"cheap_api_model": cheap, "reference_model": expensive,
+                          "required_success_rate": threshold, "status": status,
+                          "current_success_rate": c["success_rate"],
+                          "cheap_current_cost_no_higher":
+                          c["expected_cost_per_submitted_task"] <= e["expected_cost_per_submitted_task"]})
+    return {
+        "source": {"workbook": SOURCE_WORKBOOK, "sheet": SOURCE_SHEET, "rows": EXCEL_ROWS},
+        "basis": basis, "currency": "USD", "config": cfg, "notes": NOTES,
+        "deployment": DEPLOYMENT, "model_inputs": MODELS,
+        "assumptions": {**ASSUMPTIONS, "effective_monthly_fixed_cost": cfg["monthly_fixed_cost"],
+                        "fixed_cost_overridden": cfg["monthly_fixed_cost"] != CONFIG["monthly_fixed_cost"]},
+        "summaries": results, "sensitivity": scenarios, "break_even_pairs": pairs,
+        "lowest_cost_model_under_assumptions": min(
+            results, key=lambda name: results[name]["expected_cost_per_submitted_task"]),
+        "four_lever_ledger": lever_ledger(basis, results, cfg),
+    }
+
+
+def print_report(report):
+    print("D6 成本核算（USD；基于上传 Excel 和明确列示的假设）")
+    print("数据口径:", report["basis"], "\n成本配置:", report["config"])
+    print("\n费用依据与范围:", json.dumps(report["assumptions"], ensure_ascii=False, indent=2))
+    print("\n模型 | P | Layer1/任务 | Layer2/任务 | 任务成本(不含固定) | 月总成本")
+    for name, r in report["summaries"].items():
+        print(f"{name} | {r['success_rate']:.4%} | {r['layer1_variable_cost']:.6f} | "
+              f"{r['layer2_expected_failure_cost']:.6f} | "
+              f"{r['expected_cost_per_submitted_task']:.6f} | {r['monthly_cost']:.2f}")
+    print("\n上述假设下最低成本模型:", report["lowest_cost_model_under_assumptions"])
+    print("\n敏感性：只变动P，列示成功率与月总成本")
+    for name, scenarios in report["sensitivity"].items():
+        print(name, " | ".join(f"{label}: P={r['success_rate']:.2%}, ${r['monthly_cost']:.2f}"
+                               for label, r in scenarios.items()))
+    print("\nBreak-even：API较便宜模型相对参照模型的持平成功率（共用固定成本）")
+    for pair in report["break_even_pairs"]:
+        p = pair["required_success_rate"]
+        label = f"{p:.4%}" if p is not None else "不依赖P"
+        print(f"{pair['cheap_api_model']} vs {pair['reference_model']}: {label} ({pair['status']})")
+    print("\n四个 levers：按团队修订口径；null为未量化或未提供，不等于零")
+    print(json.dumps(report["four_lever_ledger"], ensure_ascii=False, indent=2))
+    print("\n部署配置（仅记录，不执行限额）:", report["deployment"])
+    print("\n数据口径与待补项:")
+    for note in report["notes"]:
+        print("-", note)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--basis", choices=["displayed", "notes_exact"], default="displayed")
+    parser.add_argument("--json", type=Path, help="可选：将完整结果及来源导出为JSON")
+    parser.add_argument("--fixed-cost", type=float, default=CONFIG["monthly_fixed_cost"])
+    parser.add_argument("--failure-cost", type=float, default=CONFIG["failure_cost"])
+    parser.add_argument("--tool-fee", type=float, default=CONFIG["tool_fee"])
+    parser.add_argument("--volume", type=int, default=CONFIG["monthly_volume"])
+    args = parser.parse_args()
+    try:
+        report = analyze(args.basis, {"monthly_fixed_cost": args.fixed_cost,
+                                     "failure_cost": args.failure_cost,
+                                     "tool_fee": args.tool_fee, "monthly_volume": args.volume})
+    except ValueError as exc:
+        parser.error(str(exc))
+    print_report(report)
+    if args.json:
+        args.json.parent.mkdir(parents=True, exist_ok=True)
+        args.json.write_text(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
+        print("\n已导出:", args.json.resolve())
+
+
+if __name__ == "__main__":
+    main()
