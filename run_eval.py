@@ -13,7 +13,7 @@ from src.harness import run_evaluation, summarize_results
 
 ROOT = Path(__file__).resolve().parent
 RESULTS_DIR = ROOT / "results"
-RESULTS_PATH = RESULTS_DIR / "results.json"
+RESULTS_PATH = RESULTS_DIR / "D5(a)results.json"
 
 
 def main():

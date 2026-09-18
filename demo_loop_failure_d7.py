@@ -16,10 +16,9 @@ WHAT THIS SHOWS
                       re-asking for the same claim data forever. No
                       exception is raised. It just burns the entire step
                       cap and returns with NO final decision.
-    RUN 3 (restored)- the SAME forced-repeat scenario as RUN 2, but with
-                      the guard back in place. This is the actual proof
-                      that "putting X back recovers the behaviour" - not
-                      just a code comment saying so.
+    RUN 3 (restored)- the monkey-patch has been removed and the working
+                      agent is run again on the same claim. It must return
+                      to the same correct outcome and normal turn range.
 
 Runs entirely on the scripted backend. No API key needed. Reproduces
 identically every time.
@@ -35,10 +34,15 @@ import json
 from pathlib import Path
 
 from src import agent_core, backends, config
+from src.tools import reset_outbox
 
 
 def run_normal(claim_id: str) -> dict:
     config.BACKEND = "scripted"
+    # Every condition must start from the same clean simulated write state.
+    # Otherwise RUN 1 leaves a decision in memory and later conditions are
+    # measuring write de-duplication rather than the loop-control variable.
+    reset_outbox()
     return agent_core.run_agent(claim_id, approved_for_write=True)
 
 
@@ -94,7 +98,7 @@ def run_forced_loop(claim_id: str, captured: list[dict], disable_dedup: bool) ->
     return result
 
 
-def report(before: dict, after: dict) -> dict:
+def report(before: dict, after: dict, restored: dict) -> dict:
     lines = []
     def p(s=""):
         print(s)
@@ -114,6 +118,11 @@ def report(before: dict, after: dict) -> dict:
       f"tokens_out={after.get('output_tokens')} cost=${after.get('cost', 0):.4f} "
       f"decision={after.get('decision')} status={after.get('status')} "
       f"failure_reason={after.get('failure_reason')}")
+
+    p(f"\nRUN 3 (restored) - guard restored, same claim rerun normally")
+    p(f"  turns={restored['turns']} tokens_in={restored.get('input_tokens')} "
+      f"tokens_out={restored.get('output_tokens')} cost=${restored.get('cost', 0):.4f} "
+      f"decision={restored.get('decision')} status={restored.get('status')}")
 
     p("\n" + "-" * 78)
     p("1. THE INSTRUMENTATION THAT FOUND IT")
@@ -140,25 +149,17 @@ def report(before: dict, after: dict) -> dict:
     p("\n4. BEFORE / AFTER, AND PROOF THE RESTORE WORKS")
     p(f"   The monkey-patch in this script is undone in a finally block the")
     p(f"   instant this demo ends - agent_core.py, guardrails.py, backends.py")
-    p(f"   are never edited on disk. The actual proof that 'putting the guard")
-    p(f"   back' recovers correct behaviour is your full run_eval.py result:")
-    p(f"   the submitted run_eval.py regression should be re-run WITH the real guard active")
-    p(f"   before submission. The step cap should also be checked against legitimate runs in")
-    p(f"   the frozen set, so restoring the")
-    p(f"   guard costs nothing on real cases - it only blocks the artificial")
-    p(f"   repeat this demo forced.")
-    p("   NOTE: a third 'guard restored + forced repeat' run is deliberately")
-    p("   NOT attempted here. This replay is a fixed, non-adaptive queue of")
-    p("   pre-recorded responses, not a real reasoning model - once the guard")
-    p("   correctly blocks the injected repeat, the replay has no sensible")
-    p("   fallback to continue with (a real model would just try something")
-    p("   else). That is a limitation of this test harness, not evidence")
-    p("   that the guard fails to recover the agent.")
+    p(f"   are never edited on disk. RUN 3 executes after the finally block")
+    p(f"   restored the original guard. It returns decision={restored.get('decision')!r}")
+    p(f"   in {restored.get('turns')} turns, matching the working baseline.")
+    p(f"   The full run_eval.py regression separately checks that restoration")
+    p(f"   does not reduce correctness anywhere in the frozen evaluation set.")
     p("=" * 78 + "\n")
 
     return {
         "before": before,
         "after": after,
+        "restored": restored,
         "step_cap": config.STEP_CAP,
         "report_text": "\n".join(lines),
     }
@@ -175,8 +176,12 @@ def main():
     captured = capture_natural_sequence(args.case)
 
     after = run_forced_loop(args.case, captured, disable_dedup=True)
+    restored = run_normal(args.case)
 
-    result = report(before, after)
+    if restored.get("decision") != before.get("decision") or restored.get("status") != before.get("status"):
+        raise SystemExit("Restored guard did not recover the working baseline.")
+
+    result = report(before, after, restored)
 
     out_dir = Path(__file__).resolve().parent / "results" / "failures"
     out_dir.mkdir(parents=True, exist_ok=True)

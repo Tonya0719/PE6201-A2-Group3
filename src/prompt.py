@@ -91,6 +91,9 @@ GROUNDING
 ASK FORMAT
 
 For request_document, trigger must be null.
+Use the JSON literal null, never the string "null", for every nullable field.
+Correct: {{"trigger":null,"missing_item":null}}
+Wrong:   {{"trigger":"null","missing_item":"null"}}
 
 If a required PA has records_found=0:
 missing_item =

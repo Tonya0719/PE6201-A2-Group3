@@ -47,12 +47,20 @@ def parse_model_response(text: str):
         x = json.loads(raw)
     except json.JSONDecodeError as e:
         return {"type": "error", "error": "INVALID_OR_MULTIPLE_JSON", "raw": text, "json_error": str(e)}
+    normalized_singleton_array = False
+    if isinstance(x, list) and len(x) == 1 and isinstance(x[0], dict):
+        x = x[0]
+        normalized_singleton_array = True
     if not isinstance(x, dict):
         return {"type": "error", "error": "RESPONSE_NOT_OBJECT", "raw": x}
     if x.get("type") == "observation":
         return {"type": "error", "error": "MODEL_FABRICATED_OBSERVATION", "raw": x}
     if x.get("type") == "action" and isinstance(x.get("tool_calls"), list):
-        return {"type": "action", "tool_calls": x["tool_calls"]}
+        return {
+            "type": "action",
+            "tool_calls": x["tool_calls"],
+            "normalized_singleton_array": normalized_singleton_array,
+        }
     if x.get("type") == "final":
         return {
             "type": "final",
@@ -61,8 +69,29 @@ def parse_model_response(text: str):
             "missing_item": x.get("missing_item"),
             "reason": x.get("reason"),
             "evidence": x.get("evidence", []),
+            "normalized_singleton_array": normalized_singleton_array,
         }
     return {"type": "error", "error": "UNKNOWN_RESPONSE_TYPE", "raw": x}
+
+
+def _normalize_nullable_action_fields(call: dict):
+    """Normalize common JSON-null spelling errors at the ACI boundary.
+
+    Only fields whose contract explicitly permits null are touched. The
+    normalized field names are returned so the run remains auditable.
+    """
+    normalized = {
+        "name": call.get("name"),
+        "arguments": dict(call.get("arguments") or {}),
+    }
+    changed = []
+    if normalized["name"] == "issue_decision_letter":
+        for field in ("trigger", "missing_item"):
+            value = normalized["arguments"].get(field)
+            if isinstance(value, str) and value.strip().lower() == "null":
+                normalized["arguments"][field] = None
+                changed.append(field)
+    return normalized, changed
 
 
 def _usage_cost(inp: int, out: int):
@@ -209,6 +238,8 @@ def run_agent(
                 "input_tokens": inp, "output_tokens": out, "cost": cost,
                 "tool_history": history, "guardrail_events": guards, "gated_action_count": gated_count,
             }
+        if parsed.get("normalized_singleton_array"):
+            guards.append({"event": "SINGLETON_RESPONSE_ARRAY_NORMALIZED", "model_call": turn})
 
         if parsed["type"] == "final":
             if written_record is not None:
@@ -254,7 +285,17 @@ def run_agent(
                 "tool_history": history, "guardrail_events": guards, "gated_action_count": gated_count,
             }
 
-        raw_calls = parsed["tool_calls"]
+        raw_calls = []
+        for raw_call in parsed["tool_calls"]:
+            call, changed_fields = _normalize_nullable_action_fields(raw_call)
+            raw_calls.append(call)
+            if changed_fields:
+                guards.append({
+                    "event": "NULLABLE_FIELDS_NORMALIZED",
+                    "model_call": turn,
+                    "tool": call.get("name"),
+                    "fields": changed_fields,
+                })
         gated_calls = [c for c in raw_calls if c.get("name") == "issue_decision_letter"]
         if gated_calls:
             if len(raw_calls) != 1:
@@ -293,9 +334,7 @@ def run_agent(
                     "input_tokens": inp, "output_tokens": out, "cost": cost,
                     "tool_history": history, "guardrail_events": guards, "gated_action_count": gated_count,
                 }
-            seen.add(action_signature(call))
             tool_turns += 1
-            gated_attempt_args = dict(call.get("arguments", {}))
 
             ready, ready_reason = check_evidence_complete(call, history)
             if not ready:
@@ -314,6 +353,7 @@ def run_agent(
             if allowed:
                 observations = execute_tool_calls([call], parallel=False, tool_spec_version=spec_version)
                 if observations and observations[0].get("ok"):
+                    seen.add(action_signature(call))
                     gated_count += 1
                     written_record = get_outbox_record(claim_id)
                 history.append({"turn": tool_turns, "model_call": turn, "tool_calls": [call], "observations": observations, "governance_cliff": True})
@@ -327,6 +367,7 @@ def run_agent(
                 "status": "held",
                 "reason": reason,
             }
+            gated_attempt_args = dict(call.get("arguments", {}))
             observations = [obs]
             guards.append({"event": reason, "tool_call": call})
             history.append({"turn": tool_turns, "model_call": turn, "tool_calls": [call], "observations": observations, "governance_cliff": True})
@@ -401,7 +442,14 @@ def run_agent(
         if deferred:
             assistant_content = json.dumps({"type": "action", "tool_calls": approved}, ensure_ascii=False)
         messages.append({"role": "assistant", "content": assistant_content})
-        messages.append({"role": "user", "content": json.dumps({"type": "observation", "results": observations}, ensure_ascii=False)})
+        observation_payload = {"type": "observation", "results": observations}
+        if deferred:
+            observation_payload["deferred_calls_not_executed"] = deferred
+            observation_payload["instruction"] = (
+                "These calls were not executed because the sequential baseline permits one call per turn. "
+                "On the next turn, issue the next still-required deferred call only; do not assume a deferred result."
+            )
+        messages.append({"role": "user", "content": json.dumps(observation_payload, ensure_ascii=False)})
 
         nudge = _needs_stage1_early_exit_nudge(observations)
         if nudge:

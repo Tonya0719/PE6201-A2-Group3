@@ -1,0 +1,352 @@
+{
+  "evidence_readiness": {
+    "all_required_evidence_ready": true,
+    "submission_inputs_complete": false,
+    "checks": {
+      "d2c_is_live": true,
+      "d2c_formal_flag": true,
+      "d2c_equal_trial_counts": true,
+      "d2c_real_batching_observed": true,
+      "d2b_is_live": true,
+      "d2b_equal_trial_counts": true,
+      "d2b_guardrails_pass": true,
+      "battery_has_at_least_3_models": true,
+      "battery_spans_at_least_2_tiers": true,
+      "battery_uses_distinct_families": true,
+      "battery_trials_are_consistent": true,
+      "cost_model_covers_battery": true,
+      "model_prices_recorded": true
+    },
+    "failed_checks": [],
+    "submission_inputs_missing": [
+      "monthly_limit_per_user"
+    ],
+    "operational_caps": {
+      "step_cap": 8,
+      "per_run_budget_usd": 0.1,
+      "monthly_limit_per_user": null
+    },
+    "warnings": [
+      "D2(c): raw output-token and API-cost totals are dominated by a flagged malformed-response outlier; report raw and sensitivity results separately and do not claim a stable total-cost saving or penalty.",
+      "D2(b): V2 reduced target return size but increased total measured API cost.",
+      "Model prices are recorded but still marked provisional; add verification source and date to the report."
+    ]
+  },
+  "lever_1_tool_block_size": {
+    "attacks": "Linear base-prompt cost; descriptors are re-sent each model turn",
+    "built_in": "D2(a) shortest defensible tool set",
+    "actual_agent_visible_tools": 5,
+    "hypothetical_agent_visible_tools": 7,
+    "actual_5_tool_spec_tokens_est": 449,
+    "hypothetical_7_tool_spec_tokens_est": 579,
+    "increase_tokens_per_turn_est": 130,
+    "increase_pct": 29.0,
+    "measurement_note": "model-agnostic ceil(characters/4) estimate"
+  },
+  "lever_2_turn_count": {
+    "attacks": "Turn count / trajectory growth",
+    "built_in": "D2(c) sequential vs batched",
+    "evidence_file": "results/d2c_comparison.json",
+    "backend": "live",
+    "model": "meta-llama/llama-3.3-70b-instruct",
+    "tool_spec_version": "v2",
+    "formal_live_run": true,
+    "sequential": {
+      "trials": 60,
+      "pass_rate": 0.75,
+      "negative_pass_rate": 0.6333333333333333,
+      "model_calls": 337,
+      "tool_turns": 249,
+      "input_tokens": 559675,
+      "output_tokens": 13474,
+      "api_cost": 0.06135709999999999,
+      "cap_hits": 1
+    },
+    "batched": {
+      "trials": 60,
+      "pass_rate": 0.8,
+      "negative_pass_rate": 0.6333333333333333,
+      "model_calls": 324,
+      "tool_turns": 234,
+      "input_tokens": 529211,
+      "output_tokens": 28656,
+      "api_cost": 0.06438350000000002,
+      "cap_hits": 0,
+      "batched_turns": 15,
+      "max_tool_calls_in_one_turn": 4
+    },
+    "deltas": {
+      "pass_rate_percentage_points": 5.000000000000004,
+      "negative_pass_rate_percentage_points": 0.0,
+      "model_calls_reduction": 13,
+      "model_calls_reduction_pct": 3.857566765578635,
+      "tool_turns_reduction": 15,
+      "tool_turns_reduction_pct": 6.024096385542169,
+      "input_token_reduction_pct": 5.4431589761915395,
+      "output_token_change_pct": 112.67626540002968,
+      "api_cost_change_pct": 4.932436506940572
+    },
+    "output_token_outlier_analysis": {
+      "method": "Flag a batched record when output_tokens exceeds both 2,000 and 10 times the batched median.",
+      "batched_median_output_tokens_per_record": 216.0,
+      "flagged_records": [
+        {
+          "case_id": "CLM-8941",
+          "trial": 1,
+          "negative": true,
+          "status": "failed",
+          "failure_reason": "INVALID_OR_MULTIPLE_JSON",
+          "output_tokens": 16410,
+          "visible_response_characters": 380
+        }
+      ],
+      "flagged_output_tokens": 16410,
+      "flagged_share_of_batched_output_pct": 57.265494137353436,
+      "raw_measured_result": {
+        "batched_output_tokens": 28656,
+        "output_token_change_pct": 112.67626540002968,
+        "batched_api_cost": 0.06438350000000002,
+        "api_cost_change_pct": 4.932436506940572
+      },
+      "outlier_exclusion_sensitivity": {
+        "batched_output_tokens": 12246,
+        "output_token_change_pct": -9.113848894166543,
+        "batched_api_cost": 0.057819500000000024,
+        "api_cost_change_pct": -5.765591920087435,
+        "note": "Sensitivity only: subtracts the provider-reported output tokens of flagged records. It does not replace the primary measured result."
+      }
+    },
+    "interpretation": "The primary run shows fewer model calls, tool turns, and input tokens. Its raw output-token and cost totals are dominated by one malformed JSON response with anomalous provider-reported completion usage. Report the raw result and the outlier-exclusion sensitivity separately: the robust conclusion is a turn/input-context reduction, while total-cost direction is not stable enough for a causal saving claim."
+  },
+  "lever_3_observation_size": {
+    "attacks": "Observation size compounds because observations are re-sent on later turns",
+    "built_in": "D2(b) get_preauthorisation interface rewrite",
+    "evidence_file": "results/experiments/d2b_v1_vs_v2.json",
+    "backend": "live",
+    "model": "meta-llama/llama-3.3-70b-instruct",
+    "controlled_variable": "get_preauthorisation",
+    "v1": {
+      "trials": 60,
+      "pass_rate": 0.7166666666666667,
+      "negative_pass_rate": 0.5,
+      "input_tokens": 497985,
+      "output_tokens": 12768,
+      "api_cost": 0.053884259999999996,
+      "avg_estimated_return_tokens_per_call": 35.6,
+      "guardrails_passed": 11
+    },
+    "v2": {
+      "trials": 60,
+      "pass_rate": 0.8166666666666667,
+      "negative_pass_rate": 0.6333333333333333,
+      "input_tokens": 546448,
+      "output_tokens": 13089,
+      "api_cost": 0.05883328000000001,
+      "avg_estimated_return_tokens_per_call": 31.736842105263158,
+      "guardrails_passed": 11
+    },
+    "deltas": {
+      "return_tokens_per_call_reduction_pct": 10.851567120047314,
+      "pass_rate_percentage_points": 9.999999999999998,
+      "negative_pass_rate_percentage_points": 13.33333333333333,
+      "input_token_change_pct": 9.731819231502957,
+      "output_token_change_pct": 2.5140977443609023,
+      "api_cost_change_pct": 9.184537376963165
+    },
+    "measurement_note": "ceil(compact JSON character count / 4); transparent model-agnostic estimate",
+    "interpretation": "V2 reduced the target tool's return size and improved pass rate, while total run tokens and cost rose. Do not describe it as a total-cost saving."
+  },
+  "lever_4_success_rate": {
+    "attacks": "Layer-2 expected human fallback cost",
+    "built_in": "D4/D5(b) measured success rate",
+    "evidence_files": [
+      "results/live/_all_models_summary.json",
+      "results/cost/d6_cost_model_results.json"
+    ],
+    "model_count": 7,
+    "families": [
+      "Amazon",
+      "DeepSeek",
+      "Google",
+      "Meta",
+      "Mistral",
+      "OpenAI",
+      "Qwen"
+    ],
+    "price_tiers": [
+      "cheap",
+      "mid"
+    ],
+    "trials_per_model": [
+      60
+    ],
+    "best_cost_model": "google/gemini-2.5-flash",
+    "best_cost_model_pass_rate": 0.9333333333333333,
+    "best_cost_model_variable_cost_per_run": 0.003840786666666666,
+    "best_cost_model_expected_failure_cost": 0.5066666666666665,
+    "best_cost_per_task": 0.5105074533333331,
+    "best_cost_model_monthly_cost": 4084.0596266666653,
+    "most_reliable_model": "google/gemini-2.5-flash",
+    "most_reliable_pass_rate": 0.9333333333333333,
+    "assumptions": {
+      "volume": 8000,
+      "failure_cost": 7.6,
+      "monthly_fixed_cost": 0.0
+    },
+    "sensitivity_model": "google/gemini-2.5-flash",
+    "sensitivity": {
+      "minus_10pp": {
+        "layer1_variable_cost": 0.003840786666666666,
+        "layer2_expected_failure_cost": 1.2666666666666664,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 1.2705074533333331,
+        "monthly_cost": 10164.059626666665,
+        "success_rate": 0.8333333333333334
+      },
+      "base": {
+        "layer1_variable_cost": 0.003840786666666666,
+        "layer2_expected_failure_cost": 0.5066666666666665,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 0.5105074533333331,
+        "monthly_cost": 4084.0596266666653,
+        "success_rate": 0.9333333333333333
+      },
+      "plus_10pp": {
+        "layer1_variable_cost": 0.003840786666666666,
+        "layer2_expected_failure_cost": 0.0,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 0.003840786666666666,
+        "monthly_cost": 30.726293333333327,
+        "success_rate": 1
+      }
+    },
+    "break_even": {
+      "cheapest_model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "most_reliable_model": "google/gemini-2.5-flash",
+      "break_even_success_rate": 0.9328877372938597,
+      "cheapest_clears_break_even": false
+    },
+    "per_model": [
+      {
+        "model": "amazon/nova-2-lite-v1",
+        "tier": "mid",
+        "family": "Amazon",
+        "pass_rate": 0.7,
+        "variable_cost_per_run": 0.0028855733333333334,
+        "trials": 60,
+        "price_used": {
+          "input_usd_per_million_tokens": 0.3,
+          "output_usd_per_million_tokens": 2.5
+        },
+        "layer1_variable_cost": 0.0028855733333333334,
+        "layer2_expected_failure_cost": 2.2800000000000002,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 2.2828855733333335,
+        "monthly_cost": 18263.084586666668
+      },
+      {
+        "model": "deepseek/deepseek-chat-v3.1",
+        "tier": "cheap",
+        "family": "DeepSeek",
+        "pass_rate": 0.9,
+        "variable_cost_per_run": 0.0024245683333333334,
+        "trials": 60,
+        "price_used": {
+          "input_usd_per_million_tokens": 0.25,
+          "output_usd_per_million_tokens": 0.95
+        },
+        "layer1_variable_cost": 0.0024245683333333334,
+        "layer2_expected_failure_cost": 0.7599999999999998,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 0.7624245683333332,
+        "monthly_cost": 6099.396546666665
+      },
+      {
+        "model": "google/gemini-2.5-flash",
+        "tier": "mid",
+        "family": "Google",
+        "pass_rate": 0.9333333333333333,
+        "variable_cost_per_run": 0.003840786666666666,
+        "trials": 60,
+        "price_used": {
+          "input_usd_per_million_tokens": 0.3,
+          "output_usd_per_million_tokens": 2.5
+        },
+        "layer1_variable_cost": 0.003840786666666666,
+        "layer2_expected_failure_cost": 0.5066666666666665,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 0.5105074533333331,
+        "monthly_cost": 4084.0596266666653
+      },
+      {
+        "model": "meta-llama/llama-3.3-70b-instruct",
+        "tier": "cheap",
+        "family": "Meta",
+        "pass_rate": 0.7,
+        "variable_cost_per_run": 0.000914567,
+        "trials": 60,
+        "price_used": {
+          "input_usd_per_million_tokens": 0.1,
+          "output_usd_per_million_tokens": 0.32
+        },
+        "layer1_variable_cost": 0.000914567,
+        "layer2_expected_failure_cost": 2.2800000000000002,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 2.2809145670000004,
+        "monthly_cost": 18247.316536000002
+      },
+      {
+        "model": "mistralai/mistral-small-2603",
+        "tier": "cheap",
+        "family": "Mistral",
+        "pass_rate": 0.6,
+        "variable_cost_per_run": 0.0015594074999999998,
+        "trials": 60,
+        "price_used": {
+          "input_usd_per_million_tokens": 0.15,
+          "output_usd_per_million_tokens": 0.6
+        },
+        "layer1_variable_cost": 0.0015594074999999998,
+        "layer2_expected_failure_cost": 3.04,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 3.0415594075,
+        "monthly_cost": 24332.47526
+      },
+      {
+        "model": "openai/gpt-4o-mini",
+        "tier": "cheap",
+        "family": "OpenAI",
+        "pass_rate": 0.8,
+        "variable_cost_per_run": 0.0012768049999999996,
+        "trials": 60,
+        "price_used": {
+          "input_usd_per_million_tokens": 0.15,
+          "output_usd_per_million_tokens": 0.6
+        },
+        "layer1_variable_cost": 0.0012768049999999996,
+        "layer2_expected_failure_cost": 1.5199999999999996,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 1.5212768049999996,
+        "monthly_cost": 12170.214439999996
+      },
+      {
+        "model": "qwen/qwen3-30b-a3b-instruct-2507",
+        "tier": "cheap",
+        "family": "Qwen",
+        "pass_rate": 0.6,
+        "variable_cost_per_run": 0.00045425676666666667,
+        "trials": 60,
+        "price_used": {
+          "input_usd_per_million_tokens": 0.048,
+          "output_usd_per_million_tokens": 0.19
+        },
+        "layer1_variable_cost": 0.00045425676666666667,
+        "layer2_expected_failure_cost": 3.04,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 3.0404542567666666,
+        "monthly_cost": 24323.634054133334
+      }
+    ],
+    "interpretation": "Expected human fallback cost dominates API cost; success rate is the largest lever."
+  }
+}

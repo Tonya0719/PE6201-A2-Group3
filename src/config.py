@@ -1,7 +1,7 @@
 """Central configuration for controlled PE6201 A2 experiments."""
 
 # D5(a): submitted default must be scripted, deterministic, no network, no key.
-BACKEND = "scripted"          # "scripted" | "live"
+BACKEND = "scripted"      # "scripted" | "live"
 MODEL = "google/gemini-2.5-flash-lite"
 BASE_URL = "https://openrouter.ai/api/v1"
 

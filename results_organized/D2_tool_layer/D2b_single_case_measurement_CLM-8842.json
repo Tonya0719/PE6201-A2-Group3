@@ -1,0 +1,91 @@
+{
+  "experiment": "D2(c) B and D measurement",
+  "configuration": {
+    "claim_id": "CLM-8842",
+    "model": "google/gemini-2.5-flash-lite",
+    "tool_spec_version": "v2",
+    "backend": "live",
+    "approved_for_write": true,
+    "parallel_enabled": true,
+    "max_tool_calls_per_turn": null
+  },
+  "agent_result": {
+    "decision": null,
+    "trigger": null,
+    "missing_item": null,
+    "status": "failed",
+    "failure_reason": "DUPLICATE_GATED_ACTION",
+    "tool_turns": 6,
+    "model_calls": 7
+  },
+  "derived_metrics": {
+    "B_first_turn_input_tokens": 1395,
+    "T_model_calls": 7,
+    "D_mean_input_growth_per_turn": 194,
+    "actual_total_input_tokens": 14225,
+    "actual_total_output_tokens": 499,
+    "theoretical_total_input_tokens": 13839.0,
+    "approximation_error_pct": -2.7135325131810193
+  },
+  "input_deltas": [
+    231,
+    193,
+    291,
+    181,
+    134,
+    134
+  ],
+  "per_turn_usage": [
+    {
+      "turn": 1,
+      "input_tokens": 1395,
+      "output_tokens": 29,
+      "message_count": 2,
+      "delta_input_tokens": null
+    },
+    {
+      "turn": 2,
+      "input_tokens": 1626,
+      "output_tokens": 29,
+      "message_count": 4,
+      "delta_input_tokens": 231
+    },
+    {
+      "turn": 3,
+      "input_tokens": 1819,
+      "output_tokens": 101,
+      "message_count": 6,
+      "delta_input_tokens": 193
+    },
+    {
+      "turn": 4,
+      "input_tokens": 2110,
+      "output_tokens": 58,
+      "message_count": 8,
+      "delta_input_tokens": 291
+    },
+    {
+      "turn": 5,
+      "input_tokens": 2291,
+      "output_tokens": 94,
+      "message_count": 10,
+      "delta_input_tokens": 181
+    },
+    {
+      "turn": 6,
+      "input_tokens": 2425,
+      "output_tokens": 94,
+      "message_count": 12,
+      "delta_input_tokens": 134
+    },
+    {
+      "turn": 7,
+      "input_tokens": 2559,
+      "output_tokens": 94,
+      "message_count": 14,
+      "delta_input_tokens": 134
+    }
+  ],
+  "formula": "B*T + D*T*(T-1)/2",
+  "measurement_note": "B is provider-reported input tokens on the first model call. D is the mean increase in provider-reported input tokens between consecutive model calls. Actual D2(c) token/cost comparisons should use provider-reported aggregate usage rather than this approximation."
+}

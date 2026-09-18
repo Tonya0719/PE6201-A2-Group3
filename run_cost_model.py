@@ -24,6 +24,7 @@ import glob
 import json
 from pathlib import Path
 
+from run_live_battery import MODELS
 from src.cost_analysis import build_cost_summary, sensitivity, break_even_success_rate
 
 ROOT = Path(__file__).resolve().parent
@@ -49,7 +50,10 @@ def load_models():
             "pass_rate": summary["pass_rate"],
             "variable_cost_per_run": variable_cost_per_run,
             "trials": trials,
-            "price_used": data.get("price_used"),
+            "price_used": data.get("price_used") or {
+                "input_usd_per_million_tokens": data.get("price_in_per_m"),
+                "output_usd_per_million_tokens": data.get("price_out_per_m"),
+            },
         })
     return models
 
@@ -67,8 +71,9 @@ def main():
               f"then recompute_costs.py to fix pricing, then re-run this.")
         return
 
-    if len(models) < 6:
-        print(f"WARNING: only {len(models)} of 6 models have saved results. "
+    expected_models = len(MODELS)
+    if len(models) < expected_models:
+        print(f"WARNING: only {len(models)} of {expected_models} models have saved results. "
               f"Proceeding with what's available — re-run this once the rest finish.\n")
 
     print(f"Problem A defaults: volume={args.volume}/month, failure_cost=${args.failure_cost:.2f}\n")

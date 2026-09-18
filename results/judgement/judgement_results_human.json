@@ -1,0 +1,1575 @@
+{
+  "source_model": "google/gemini-2.5-flash",
+  "source_file": "/Users/adrian/Desktop/Education/NTU/T1/PE6201/A2/PE6201_A2_A-3_0917/results_organized/live/google__gemini-2_5-flash.json",
+  "source_trials": 60,
+  "selection_rule": "Twelve case IDs fixed before prose review: four approve, four request-document, and four escalate cases; always trial 1. Cases cover different tool paths and are selected independently of judgement outcome.",
+  "selected_case_ids": [
+    "CLM-3001",
+    "CLM-8842",
+    "CLM-8861",
+    "CLM-9506",
+    "CLM-8888",
+    "CLM-8894",
+    "CLM-8901",
+    "CLM-9507",
+    "CLM-8910",
+    "CLM-8917",
+    "CLM-8925",
+    "CLM-8933"
+  ],
+  "rubric_file": "/Users/adrian/Desktop/Education/NTU/T1/PE6201/A2/PE6201_A2_A-3_0917/evals/judgement_prompt.txt",
+  "rubric_checks": [
+    "consistent_with_structured_outcome",
+    "evidence_present_in_trace",
+    "no_unsupported_facts",
+    "specific_enough"
+  ],
+  "records": [
+    {
+      "case_id": "CLM-3001",
+      "trial": 1,
+      "expected_decision": "approve_in_principle",
+      "deterministic_pass": true,
+      "decision": "approve_in_principle",
+      "trigger": null,
+      "missing_item": null,
+      "reason": "All policy gates passed and coverage confirmed.",
+      "evidence": {
+        "claim_id": "CLM-3001",
+        "member_id": "M-3390",
+        "policy_id": "POL-4102",
+        "date_of_service": "2026-09-18",
+        "claim_total": 90.0,
+        "remaining_annual_limit": 600,
+        "hospital_panel": true,
+        "lines": [
+          {
+            "code": "80053",
+            "coverage_status": "covered",
+            "requires_preauth": false
+          }
+        ]
+      },
+      "trace": [
+        {
+          "turn": 1,
+          "tools": [
+            "get_claim"
+          ],
+          "observations": [
+            {
+              "tool": "get_claim",
+              "ok": true,
+              "result": {
+                "claim_id": "CLM-3001",
+                "member_id": "M-3390",
+                "hospital_id": "H-114",
+                "date_of_service": "2026-09-18",
+                "narrative": "Just the usual yearly bloods, nothing unusual this time.",
+                "documents": [
+                  "itemised_bill"
+                ],
+                "lines": [
+                  {
+                    "code": "80053",
+                    "amount": 90
+                  }
+                ],
+                "duplicate_of": null,
+                "claim_total": 90.0
+              }
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "tools": [
+            "lookup_policy"
+          ],
+          "observations": [
+            {
+              "tool": "lookup_policy",
+              "ok": true,
+              "result": {
+                "policy_id": "POL-4102",
+                "status": "active",
+                "start_date": "2026-01-01",
+                "end_date": "2026-12-31",
+                "annual_limit": 6000,
+                "used_to_date": 5400,
+                "remaining_annual_limit": 600,
+                "exclusions": [
+                  {
+                    "code": "15823",
+                    "rule": "EX-14 cosmetic dermatology"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "tools": [
+            "check_coverage"
+          ],
+          "observations": [
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "80053",
+                "coverage_status": "covered",
+                "exclusion_code": null,
+                "requires_preauth": false
+              }
+            },
+            {
+              "type": "helper_context",
+              "hospital_panel": true,
+              "missing_documents": []
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "tools": [
+            "issue_decision_letter"
+          ],
+          "observations": [
+            {
+              "tool": "issue_decision_letter",
+              "ok": true,
+              "result": {
+                "recorded": true,
+                "case_id": "CLM-3001",
+                "decision": "approve_in_principle"
+              }
+            }
+          ]
+        }
+      ],
+      "checks": {
+        "consistent_with_structured_outcome": true,
+        "evidence_present_in_trace": true,
+        "no_unsupported_facts": true,
+        "specific_enough": true
+      },
+      "judgement_pass": true,
+      "review_comment": "Trace confirms active policy POL-4102 and covered code 80053 (no pre-auth). Reason fully aligns with facts."
+    },
+    {
+      "case_id": "CLM-8842",
+      "trial": 1,
+      "expected_decision": "approve_in_principle",
+      "deterministic_pass": true,
+      "decision": "approve_in_principle",
+      "trigger": null,
+      "missing_item": null,
+      "reason": null,
+      "evidence": {
+        "claim_id": "CLM-8842",
+        "member_id": "M-2214",
+        "policy_id": "POL-3310",
+        "date_of_service": "2026-09-02",
+        "claim_total": 2480.0,
+        "remaining_annual_limit": 9200,
+        "lines": [
+          {
+            "code": "47120",
+            "coverage_status": "covered"
+          },
+          {
+            "code": "62480",
+            "coverage_status": "covered",
+            "pre_authorisation_id": "PA-5521"
+          },
+          {
+            "code": "31255",
+            "coverage_status": "excluded",
+            "exclusion_code": "EX-14 cosmetic dermatology"
+          }
+        ]
+      },
+      "trace": [
+        {
+          "turn": 1,
+          "tools": [
+            "get_claim"
+          ],
+          "observations": [
+            {
+              "tool": "get_claim",
+              "ok": true,
+              "result": {
+                "claim_id": "CLM-8842",
+                "member_id": "M-2214",
+                "hospital_id": "H-114",
+                "date_of_service": "2026-09-02",
+                "narrative": "Admitted for appendix removal. Surgeon also treated a back problem and did a skin procedure while I was in.",
+                "documents": [
+                  "itemised_bill",
+                  "discharge_summary"
+                ],
+                "lines": [
+                  {
+                    "code": "47120",
+                    "amount": 1400
+                  },
+                  {
+                    "code": "62480",
+                    "amount": 780
+                  },
+                  {
+                    "code": "31255",
+                    "amount": 300
+                  }
+                ],
+                "duplicate_of": null,
+                "claim_total": 2480.0
+              }
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "tools": [
+            "lookup_policy"
+          ],
+          "observations": [
+            {
+              "tool": "lookup_policy",
+              "ok": true,
+              "result": {
+                "policy_id": "POL-3310",
+                "status": "active",
+                "start_date": "2026-04-01",
+                "end_date": "2027-03-31",
+                "annual_limit": 12000,
+                "used_to_date": 2800,
+                "remaining_annual_limit": 9200,
+                "exclusions": [
+                  {
+                    "code": "31255",
+                    "rule": "EX-14 cosmetic dermatology"
+                  },
+                  {
+                    "code": "15823",
+                    "rule": "EX-14 cosmetic dermatology"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "tools": [
+            "check_coverage",
+            "check_coverage",
+            "check_coverage"
+          ],
+          "observations": [
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "47120",
+                "coverage_status": "covered",
+                "exclusion_code": null,
+                "requires_preauth": false
+              }
+            },
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "62480",
+                "coverage_status": "covered",
+                "exclusion_code": null,
+                "requires_preauth": true
+              }
+            },
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "31255",
+                "coverage_status": "excluded",
+                "exclusion_code": "EX-14 cosmetic dermatology",
+                "requires_preauth": false
+              }
+            },
+            {
+              "type": "helper_context",
+              "hospital_panel": true,
+              "missing_documents": []
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "tools": [
+            "get_preauthorisation"
+          ],
+          "observations": [
+            {
+              "tool": "get_preauthorisation",
+              "ok": true,
+              "result": {
+                "procedure_code": "62480",
+                "date_of_service": "2026-09-02",
+                "records_found": 1,
+                "valid_records": [
+                  {
+                    "preauthorisation_id": "PA-5521",
+                    "valid_from": "2026-08-01",
+                    "valid_to": "2026-10-31"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "turn": 5,
+          "tools": [
+            "issue_decision_letter"
+          ],
+          "observations": [
+            {
+              "tool": "issue_decision_letter",
+              "ok": true,
+              "result": {
+                "recorded": true,
+                "case_id": "CLM-8842",
+                "decision": "approve_in_principle"
+              }
+            }
+          ]
+        }
+      ],
+      "checks": {
+        "consistent_with_structured_outcome": true,
+        "evidence_present_in_trace": true,
+        "no_unsupported_facts": true,
+        "specific_enough": true
+      },
+      "judgement_pass": true,
+      "review_comment": "The decision is fully supported by the tool trace, with all coverage and preauthorization requirements properly verified."
+    },
+    {
+      "case_id": "CLM-8861",
+      "trial": 1,
+      "expected_decision": "approve_in_principle",
+      "deterministic_pass": true,
+      "decision": "approve_in_principle",
+      "trigger": null,
+      "missing_item": null,
+      "reason": null,
+      "evidence": [
+        "policy_active",
+        "date_of_service_in_policy_period",
+        "annual_limit_not_exceeded",
+        "hospital_on_panel",
+        "27447_covered",
+        "80053_covered",
+        "PA-5702_valid_for_27447"
+      ],
+      "trace": [
+        {
+          "turn": 1,
+          "tools": [
+            "get_claim"
+          ],
+          "observations": [
+            {
+              "tool": "get_claim",
+              "ok": true,
+              "result": {
+                "claim_id": "CLM-8861",
+                "member_id": "M-5502",
+                "hospital_id": "H-207",
+                "date_of_service": "2026-09-05",
+                "narrative": "Knee replacement, planned months ago.",
+                "documents": [
+                  "itemised_bill",
+                  "discharge_summary"
+                ],
+                "lines": [
+                  {
+                    "code": "27447",
+                    "amount": 8200
+                  },
+                  {
+                    "code": "80053",
+                    "amount": 90
+                  }
+                ],
+                "duplicate_of": null,
+                "claim_total": 8290.0
+              }
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "tools": [
+            "lookup_policy"
+          ],
+          "observations": [
+            {
+              "tool": "lookup_policy",
+              "ok": true,
+              "result": {
+                "policy_id": "POL-6001",
+                "status": "active",
+                "start_date": "2026-06-01",
+                "end_date": "2027-05-31",
+                "annual_limit": 15000,
+                "used_to_date": 0,
+                "remaining_annual_limit": 15000,
+                "exclusions": []
+              }
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "tools": [
+            "check_coverage",
+            "check_coverage"
+          ],
+          "observations": [
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "27447",
+                "coverage_status": "covered",
+                "exclusion_code": null,
+                "requires_preauth": true
+              }
+            },
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "80053",
+                "coverage_status": "covered",
+                "exclusion_code": null,
+                "requires_preauth": false
+              }
+            },
+            {
+              "type": "helper_context",
+              "hospital_panel": true,
+              "missing_documents": []
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "tools": [
+            "get_preauthorisation"
+          ],
+          "observations": [
+            {
+              "tool": "get_preauthorisation",
+              "ok": true,
+              "result": {
+                "procedure_code": "27447",
+                "date_of_service": "2026-09-05",
+                "records_found": 1,
+                "valid_records": [
+                  {
+                    "preauthorisation_id": "PA-5702",
+                    "valid_from": "2026-07-01",
+                    "valid_to": "2026-12-31"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "turn": 5,
+          "tools": [
+            "issue_decision_letter"
+          ],
+          "observations": [
+            {
+              "tool": "issue_decision_letter",
+              "ok": true,
+              "result": {
+                "recorded": true,
+                "case_id": "CLM-8861",
+                "decision": "approve_in_principle"
+              }
+            }
+          ]
+        }
+      ],
+      "checks": {
+        "consistent_with_structured_outcome": true,
+        "evidence_present_in_trace": true,
+        "no_unsupported_facts": true,
+        "specific_enough": true
+      },
+      "judgement_pass": true,
+      "review_comment": "The decision is fully supported by the tool trace, including valid coverage and preauthorization."
+    },
+    {
+      "case_id": "CLM-9506",
+      "trial": 1,
+      "expected_decision": "approve_in_principle",
+      "deterministic_pass": true,
+      "decision": "approve_in_principle",
+      "trigger": null,
+      "missing_item": null,
+      "reason": null,
+      "evidence": "All policy gates passed and all lines are covered.",
+      "trace": [
+        {
+          "turn": 1,
+          "tools": [
+            "get_claim"
+          ],
+          "observations": [
+            {
+              "tool": "get_claim",
+              "ok": true,
+              "result": {
+                "claim_id": "CLM-9506",
+                "member_id": "M-5502",
+                "hospital_id": "H-114",
+                "date_of_service": "2026-09-21",
+                "narrative": "Skin treatment during a routine outpatient visit.",
+                "documents": [
+                  "itemised_bill"
+                ],
+                "lines": [
+                  {
+                    "code": "31255",
+                    "amount": 400
+                  }
+                ],
+                "duplicate_of": null,
+                "claim_total": 400.0
+              }
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "tools": [
+            "lookup_policy"
+          ],
+          "observations": [
+            {
+              "tool": "lookup_policy",
+              "ok": true,
+              "result": {
+                "policy_id": "POL-6001",
+                "status": "active",
+                "start_date": "2026-06-01",
+                "end_date": "2027-05-31",
+                "annual_limit": 15000,
+                "used_to_date": 0,
+                "remaining_annual_limit": 15000,
+                "exclusions": []
+              }
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "tools": [
+            "check_coverage"
+          ],
+          "observations": [
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "31255",
+                "coverage_status": "covered",
+                "exclusion_code": null,
+                "requires_preauth": false
+              }
+            },
+            {
+              "type": "helper_context",
+              "hospital_panel": true,
+              "missing_documents": []
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "tools": [
+            "issue_decision_letter"
+          ],
+          "observations": [
+            {
+              "tool": "issue_decision_letter",
+              "ok": true,
+              "result": {
+                "recorded": true,
+                "case_id": "CLM-9506",
+                "decision": "approve_in_principle"
+              }
+            }
+          ]
+        }
+      ],
+      "checks": {
+        "consistent_with_structured_outcome": true,
+        "evidence_present_in_trace": true,
+        "no_unsupported_facts": true,
+        "specific_enough": true
+      },
+      "judgement_pass": true,
+      "review_comment": "The decision is fully supported by the trace, with the only claim line confirmed as covered."
+    },
+    {
+      "case_id": "CLM-8888",
+      "trial": 1,
+      "expected_decision": "request_document",
+      "deterministic_pass": true,
+      "decision": "request_document",
+      "trigger": null,
+      "missing_item": "pre-authorisation reference for line 62480, valid on 2026-09-08",
+      "reason": "missing_document",
+      "evidence": "Pre-authorisation is required for procedure code 62480 but no valid pre-authorisation was found.",
+      "trace": [
+        {
+          "turn": 1,
+          "tools": [
+            "get_claim"
+          ],
+          "observations": [
+            {
+              "tool": "get_claim",
+              "ok": true,
+              "result": {
+                "claim_id": "CLM-8888",
+                "member_id": "M-6118",
+                "hospital_id": "H-114",
+                "date_of_service": "2026-09-08",
+                "narrative": "Back operation, plus the surgeon removed a small growth and smoothed the scar.",
+                "documents": [
+                  "itemised_bill",
+                  "discharge_summary"
+                ],
+                "lines": [
+                  {
+                    "code": "47120",
+                    "amount": 900
+                  },
+                  {
+                    "code": "62480",
+                    "amount": 1200
+                  },
+                  {
+                    "code": "31255",
+                    "amount": 300
+                  }
+                ],
+                "duplicate_of": null,
+                "claim_total": 2400.0
+              }
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "tools": [
+            "lookup_policy"
+          ],
+          "observations": [
+            {
+              "tool": "lookup_policy",
+              "ok": true,
+              "result": {
+                "policy_id": "POL-7220",
+                "status": "active",
+                "start_date": "2026-02-01",
+                "end_date": "2027-01-31",
+                "annual_limit": 8000,
+                "used_to_date": 1200,
+                "remaining_annual_limit": 6800,
+                "exclusions": [
+                  {
+                    "code": "31255",
+                    "rule": "EX-14 cosmetic dermatology"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "tools": [
+            "check_coverage",
+            "check_coverage",
+            "check_coverage"
+          ],
+          "observations": [
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "47120",
+                "coverage_status": "covered",
+                "exclusion_code": null,
+                "requires_preauth": false
+              }
+            },
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "62480",
+                "coverage_status": "covered",
+                "exclusion_code": null,
+                "requires_preauth": true
+              }
+            },
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "31255",
+                "coverage_status": "excluded",
+                "exclusion_code": "EX-14 cosmetic dermatology",
+                "requires_preauth": false
+              }
+            },
+            {
+              "type": "helper_context",
+              "hospital_panel": true,
+              "missing_documents": []
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "tools": [
+            "get_preauthorisation"
+          ],
+          "observations": [
+            {
+              "tool": "get_preauthorisation",
+              "ok": true,
+              "result": {
+                "procedure_code": "62480",
+                "date_of_service": "2026-09-08",
+                "records_found": 0,
+                "valid_records": []
+              }
+            }
+          ]
+        },
+        {
+          "turn": 5,
+          "tools": [
+            "issue_decision_letter"
+          ],
+          "observations": [
+            {
+              "tool": "issue_decision_letter",
+              "ok": true,
+              "result": {
+                "recorded": true,
+                "case_id": "CLM-8888",
+                "decision": "request_document"
+              }
+            }
+          ]
+        }
+      ],
+      "checks": {
+        "consistent_with_structured_outcome": true,
+        "evidence_present_in_trace": true,
+        "no_unsupported_facts": true,
+        "specific_enough": true
+      },
+      "judgement_pass": true,
+      "review_comment": "The request for a missing document is fully supported by the trace, with no valid pre-authorisation found for line 62480."
+    },
+    {
+      "case_id": "CLM-8894",
+      "trial": 1,
+      "expected_decision": "request_document",
+      "deterministic_pass": true,
+      "decision": "request_document",
+      "trigger": null,
+      "missing_item": "current pre-authorisation for line 29881, valid on 2026-09-09",
+      "reason": "missing_document",
+      "evidence": "Pre-authorisation required but not valid on service date",
+      "trace": [
+        {
+          "turn": 1,
+          "tools": [
+            "get_claim"
+          ],
+          "observations": [
+            {
+              "tool": "get_claim",
+              "ok": true,
+              "result": {
+                "claim_id": "CLM-8894",
+                "member_id": "M-6118",
+                "hospital_id": "H-207",
+                "date_of_service": "2026-09-09",
+                "narrative": "Knee arthroscopy. I got approval for this earlier in the year.",
+                "documents": [
+                  "itemised_bill",
+                  "discharge_summary"
+                ],
+                "lines": [
+                  {
+                    "code": "29881",
+                    "amount": 1950
+                  }
+                ],
+                "duplicate_of": null,
+                "claim_total": 1950.0
+              }
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "tools": [
+            "lookup_policy"
+          ],
+          "observations": [
+            {
+              "tool": "lookup_policy",
+              "ok": true,
+              "result": {
+                "policy_id": "POL-7220",
+                "status": "active",
+                "start_date": "2026-02-01",
+                "end_date": "2027-01-31",
+                "annual_limit": 8000,
+                "used_to_date": 1200,
+                "remaining_annual_limit": 6800,
+                "exclusions": [
+                  {
+                    "code": "31255",
+                    "rule": "EX-14 cosmetic dermatology"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "tools": [
+            "check_coverage"
+          ],
+          "observations": [
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "29881",
+                "coverage_status": "covered",
+                "exclusion_code": null,
+                "requires_preauth": true
+              }
+            },
+            {
+              "type": "helper_context",
+              "hospital_panel": true,
+              "missing_documents": []
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "tools": [
+            "get_preauthorisation"
+          ],
+          "observations": [
+            {
+              "tool": "get_preauthorisation",
+              "ok": true,
+              "result": {
+                "procedure_code": "29881",
+                "date_of_service": "2026-09-09",
+                "records_found": 1,
+                "valid_records": []
+              }
+            }
+          ]
+        },
+        {
+          "turn": 5,
+          "tools": [
+            "issue_decision_letter"
+          ],
+          "observations": [
+            {
+              "tool": "issue_decision_letter",
+              "ok": true,
+              "result": {
+                "recorded": true,
+                "case_id": "CLM-8894",
+                "decision": "request_document"
+              }
+            }
+          ]
+        }
+      ],
+      "checks": {
+        "consistent_with_structured_outcome": true,
+        "evidence_present_in_trace": true,
+        "no_unsupported_facts": true,
+        "specific_enough": true
+      },
+      "judgement_pass": true,
+      "review_comment": "The request for a current pre-authorisation is fully supported by the trace, which shows no valid authorisation on the service date."
+    },
+    {
+      "case_id": "CLM-8901",
+      "trial": 1,
+      "expected_decision": "request_document",
+      "deterministic_pass": false,
+      "decision": "request_document",
+      "trigger": null,
+      "missing_item": "itemised_bill for line 45378",
+      "reason": "A required document is missing.",
+      "evidence": "missing_documents",
+      "trace": [
+        {
+          "turn": 1,
+          "tools": [
+            "get_claim"
+          ],
+          "observations": [
+            {
+              "tool": "get_claim",
+              "ok": true,
+              "result": {
+                "claim_id": "CLM-8901",
+                "member_id": "M-5502",
+                "hospital_id": "H-114",
+                "date_of_service": "2026-09-10",
+                "narrative": "Colonoscopy, day procedure.",
+                "documents": [],
+                "lines": [
+                  {
+                    "code": "45378",
+                    "amount": 1150
+                  }
+                ],
+                "duplicate_of": null,
+                "claim_total": 1150.0
+              }
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "tools": [
+            "lookup_policy"
+          ],
+          "observations": [
+            {
+              "tool": "lookup_policy",
+              "ok": true,
+              "result": {
+                "policy_id": "POL-6001",
+                "status": "active",
+                "start_date": "2026-06-01",
+                "end_date": "2027-05-31",
+                "annual_limit": 15000,
+                "used_to_date": 0,
+                "remaining_annual_limit": 15000,
+                "exclusions": []
+              }
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "tools": [
+            "check_coverage"
+          ],
+          "observations": [
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "45378",
+                "coverage_status": "covered",
+                "exclusion_code": null,
+                "requires_preauth": false
+              }
+            },
+            {
+              "type": "helper_context",
+              "hospital_panel": true,
+              "missing_documents": [
+                {
+                  "procedure_code": "45378",
+                  "document": "itemised_bill"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "tools": [
+            "issue_decision_letter"
+          ],
+          "observations": [
+            {
+              "tool": "issue_decision_letter",
+              "ok": true,
+              "result": {
+                "recorded": true,
+                "case_id": "CLM-8901",
+                "decision": "request_document"
+              }
+            }
+          ]
+        }
+      ],
+      "checks": {
+        "consistent_with_structured_outcome": true,
+        "evidence_present_in_trace": true,
+        "no_unsupported_facts": true,
+        "specific_enough": true
+      },
+      "judgement_pass": true,
+      "review_comment": "The request for the itemised bill is fully supported by the trace, which confirms the document is missing."
+    },
+    {
+      "case_id": "CLM-9507",
+      "trial": 1,
+      "expected_decision": "request_document",
+      "deterministic_pass": true,
+      "decision": "request_document",
+      "trigger": null,
+      "missing_item": "current pre-authorisation for line 27447, valid on 2026-06-15",
+      "reason": "A required pre-authorisation is not valid on the service date.",
+      "evidence": "Pre-authorisation for procedure 27447 is not valid on 2026-06-15.",
+      "trace": [
+        {
+          "turn": 1,
+          "tools": [
+            "get_claim"
+          ],
+          "observations": [
+            {
+              "tool": "get_claim",
+              "ok": true,
+              "result": {
+                "claim_id": "CLM-9507",
+                "member_id": "M-5502",
+                "hospital_id": "H-207",
+                "date_of_service": "2026-06-15",
+                "narrative": "Knee replacement carried out in June after treatment was arranged.",
+                "documents": [
+                  "itemised_bill",
+                  "discharge_summary"
+                ],
+                "lines": [
+                  {
+                    "code": "27447",
+                    "amount": 4200
+                  }
+                ],
+                "duplicate_of": null,
+                "claim_total": 4200.0
+              }
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "tools": [
+            "lookup_policy"
+          ],
+          "observations": [
+            {
+              "tool": "lookup_policy",
+              "ok": true,
+              "result": {
+                "policy_id": "POL-6001",
+                "status": "active",
+                "start_date": "2026-06-01",
+                "end_date": "2027-05-31",
+                "annual_limit": 15000,
+                "used_to_date": 0,
+                "remaining_annual_limit": 15000,
+                "exclusions": []
+              }
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "tools": [
+            "check_coverage"
+          ],
+          "observations": [
+            {
+              "tool": "check_coverage",
+              "ok": true,
+              "result": {
+                "procedure_code": "27447",
+                "coverage_status": "covered",
+                "exclusion_code": null,
+                "requires_preauth": true
+              }
+            },
+            {
+              "type": "helper_context",
+              "hospital_panel": true,
+              "missing_documents": []
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "tools": [
+            "get_preauthorisation"
+          ],
+          "observations": [
+            {
+              "tool": "get_preauthorisation",
+              "ok": true,
+              "result": {
+                "procedure_code": "27447",
+                "date_of_service": "2026-06-15",
+                "records_found": 1,
+                "valid_records": []
+              }
+            }
+          ]
+        },
+        {
+          "turn": 5,
+          "tools": [
+            "issue_decision_letter"
+          ],
+          "observations": [
+            {
+              "tool": "issue_decision_letter",
+              "ok": true,
+              "result": {
+                "recorded": true,
+                "case_id": "CLM-9507",
+                "decision": "request_document"
+              }
+            }
+          ]
+        }
+      ],
+      "checks": {
+        "consistent_with_structured_outcome": true,
+        "evidence_present_in_trace": true,
+        "no_unsupported_facts": true,
+        "specific_enough": true
+      },
+      "judgement_pass": true,
+      "review_comment": "The request for a valid pre-authorisation is fully supported by the trace."
+    },
+    {
+      "case_id": "CLM-8910",
+      "trial": 1,
+      "expected_decision": "escalate",
+      "deterministic_pass": true,
+      "decision": "escalate",
+      "trigger": "policy_lapsed",
+      "missing_item": null,
+      "reason": "Policy has lapsed.",
+      "evidence": {
+        "policy_status": "lapsed"
+      },
+      "trace": [
+        {
+          "turn": 1,
+          "tools": [
+            "get_claim"
+          ],
+          "observations": [
+            {
+              "tool": "get_claim",
+              "ok": true,
+              "result": {
+                "claim_id": "CLM-8910",
+                "member_id": "M-4471",
+                "hospital_id": "H-114",
+                "date_of_service": "2026-09-11",
+                "narrative": "Emergency appendix operation.",
+                "documents": [
+                  "itemised_bill",
+                  "discharge_summary"
+                ],
+                "lines": [
+                  {
+                    "code": "47120",
+                    "amount": 1600
+                  },
+                  {
+                    "code": "80053",
+                    "amount": 90
+                  },
+                  {
+                    "code": "99213",
+                    "amount": 150
+                  }
+                ],
+                "duplicate_of": null,
+                "claim_total": 1840.0
+              }
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "tools": [
+            "lookup_policy"
+          ],
+          "observations": [
+            {
+              "tool": "lookup_policy",
+              "ok": true,
+              "result": {
+                "policy_id": "POL-5588",
+                "status": "lapsed",
+                "start_date": "2025-04-01",
+                "end_date": "2026-03-31",
+                "annual_limit": 12000,
+                "used_to_date": 900,
+                "remaining_annual_limit": 11100,
+                "exclusions": []
+              }
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "tools": [
+            "issue_decision_letter"
+          ],
+          "observations": [
+            {
+              "tool": "issue_decision_letter",
+              "ok": true,
+              "result": {
+                "recorded": true,
+                "case_id": "CLM-8910",
+                "decision": "escalate"
+              }
+            }
+          ]
+        }
+      ],
+      "checks": {
+        "consistent_with_structured_outcome": true,
+        "evidence_present_in_trace": true,
+        "no_unsupported_facts": true,
+        "specific_enough": true
+      },
+      "judgement_pass": true,
+      "review_comment": "The escalation is fully supported by the trace, which confirms that the policy has lapsed."
+    },
+    {
+      "case_id": "CLM-8917",
+      "trial": 1,
+      "expected_decision": "escalate",
+      "deterministic_pass": true,
+      "decision": "escalate",
+      "trigger": "outside_policy_dates",
+      "missing_item": null,
+      "reason": "date_of_service is outside [start_date, end_date]",
+      "evidence": {
+        "date_of_service": "2026-05-20",
+        "policy_start_date": "2026-06-01",
+        "policy_end_date": "2027-05-31"
+      },
+      "trace": [
+        {
+          "turn": 1,
+          "tools": [
+            "get_claim"
+          ],
+          "observations": [
+            {
+              "tool": "get_claim",
+              "ok": true,
+              "result": {
+                "claim_id": "CLM-8917",
+                "member_id": "M-5502",
+                "hospital_id": "H-207",
+                "date_of_service": "2026-05-20",
+                "narrative": "Treatment in May.",
+                "documents": [
+                  "itemised_bill"
+                ],
+                "lines": [
+                  {
+                    "code": "99213",
+                    "amount": 200
+                  }
+                ],
+                "duplicate_of": null,
+                "claim_total": 200.0
+              }
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "tools": [
+            "lookup_policy"
+          ],
+          "observations": [
+            {
+              "tool": "lookup_policy",
+              "ok": true,
+              "result": {
+                "policy_id": "POL-6001",
+                "status": "active",
+                "start_date": "2026-06-01",
+                "end_date": "2027-05-31",
+                "annual_limit": 15000,
+                "used_to_date": 0,
+                "remaining_annual_limit": 15000,
+                "exclusions": []
+              }
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "tools": [
+            "issue_decision_letter"
+          ],
+          "observations": [
+            {
+              "tool": "issue_decision_letter",
+              "ok": true,
+              "result": {
+                "recorded": true,
+                "case_id": "CLM-8917",
+                "decision": "escalate"
+              }
+            }
+          ]
+        }
+      ],
+      "checks": {
+        "consistent_with_structured_outcome": true,
+        "evidence_present_in_trace": true,
+        "no_unsupported_facts": true,
+        "specific_enough": true
+      },
+      "judgement_pass": true,
+      "review_comment": "The escalation is fully supported by the trace, which confirms the service date falls outside the policy period."
+    },
+    {
+      "case_id": "CLM-8925",
+      "trial": 1,
+      "expected_decision": "escalate",
+      "deterministic_pass": true,
+      "decision": "escalate",
+      "trigger": "annual_limit_exceeded",
+      "missing_item": null,
+      "reason": "Claim total 11400.0 exceeds remaining annual limit 9200.0.",
+      "evidence": {
+        "claim_total": 11400.0,
+        "remaining_annual_limit": 9200.0
+      },
+      "trace": [
+        {
+          "turn": 1,
+          "tools": [
+            "get_claim"
+          ],
+          "observations": [
+            {
+              "tool": "get_claim",
+              "ok": true,
+              "result": {
+                "claim_id": "CLM-8925",
+                "member_id": "M-2214",
+                "hospital_id": "H-114",
+                "date_of_service": "2026-09-12",
+                "narrative": "Knee replacement, plus the appendix operation and a scan.",
+                "documents": [
+                  "itemised_bill",
+                  "discharge_summary"
+                ],
+                "lines": [
+                  {
+                    "code": "27447",
+                    "amount": 9800
+                  },
+                  {
+                    "code": "47120",
+                    "amount": 1400
+                  },
+                  {
+                    "code": "70553",
+                    "amount": 200
+                  }
+                ],
+                "duplicate_of": null,
+                "claim_total": 11400.0
+              }
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "tools": [
+            "lookup_policy"
+          ],
+          "observations": [
+            {
+              "tool": "lookup_policy",
+              "ok": true,
+              "result": {
+                "policy_id": "POL-3310",
+                "status": "active",
+                "start_date": "2026-04-01",
+                "end_date": "2027-03-31",
+                "annual_limit": 12000,
+                "used_to_date": 2800,
+                "remaining_annual_limit": 9200,
+                "exclusions": [
+                  {
+                    "code": "31255",
+                    "rule": "EX-14 cosmetic dermatology"
+                  },
+                  {
+                    "code": "15823",
+                    "rule": "EX-14 cosmetic dermatology"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "tools": [
+            "issue_decision_letter"
+          ],
+          "observations": [
+            {
+              "tool": "issue_decision_letter",
+              "ok": true,
+              "result": {
+                "recorded": true,
+                "case_id": "CLM-8925",
+                "decision": "escalate"
+              }
+            }
+          ]
+        }
+      ],
+      "checks": {
+        "consistent_with_structured_outcome": true,
+        "evidence_present_in_trace": true,
+        "no_unsupported_facts": true,
+        "specific_enough": true
+      },
+      "judgement_pass": true,
+      "review_comment": "The escalation is fully supported by the trace, with the claim total exceeding the remaining annual limit."
+    },
+    {
+      "case_id": "CLM-8933",
+      "trial": 1,
+      "expected_decision": "escalate",
+      "deterministic_pass": true,
+      "decision": "escalate",
+      "trigger": "duplicate_claim",
+      "missing_item": null,
+      "reason": "This claim is a duplicate of CLM-8710.",
+      "evidence": {
+        "duplicate_of": "CLM-8710"
+      },
+      "trace": [
+        {
+          "turn": 1,
+          "tools": [
+            "get_claim"
+          ],
+          "observations": [
+            {
+              "tool": "get_claim",
+              "ok": true,
+              "result": {
+                "claim_id": "CLM-8933",
+                "member_id": "M-2214",
+                "hospital_id": "H-114",
+                "date_of_service": "2026-08-20",
+                "narrative": "Resubmitting my August appendix claim, I do not think it was received.",
+                "documents": [
+                  "itemised_bill",
+                  "discharge_summary"
+                ],
+                "lines": [
+                  {
+                    "code": "47120",
+                    "amount": 1500
+                  }
+                ],
+                "duplicate_of": "CLM-8710",
+                "claim_total": 1500.0
+              }
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "tools": [
+            "issue_decision_letter"
+          ],
+          "observations": [
+            {
+              "tool": "issue_decision_letter",
+              "ok": true,
+              "result": {
+                "recorded": true,
+                "case_id": "CLM-8933",
+                "decision": "escalate"
+              }
+            }
+          ]
+        }
+      ],
+      "checks": {
+        "consistent_with_structured_outcome": true,
+        "evidence_present_in_trace": true,
+        "no_unsupported_facts": true,
+        "specific_enough": true
+      },
+      "judgement_pass": true,
+      "review_comment": "The escalation is fully supported by the trace, which confirms the claim is a duplicate of CLM-8710."
+    }
+  ],
+  "method": "human_review",
+  "reviewer": "MA JIAN",
+  "review_date": "2026-09-17",
+  "instructions": "A team member must inspect each trace and fill all four checks, judgement_pass, and review_comment. Do not change source fields.",
+  "summary": {
+    "reviewed": 12,
+    "passed": 12,
+    "failed": 0,
+    "pass_rate": 1.0
+  }
+}

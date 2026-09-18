@@ -9,6 +9,8 @@ pip install -r requirements.txt
 python check_my_data.py
 python run_eval.py
 python run_guardrails.py
+python demo_loop_failure_d7.py
+python demo_prompt_compliance_failure.py
 ```
 
 `run_eval.py` forces the deterministic scripted backend and needs no key or network. The submitted default in `src/config.py` is also `BACKEND = "scripted"`.
@@ -29,8 +31,9 @@ python run_guardrails.py
 
 - D2(b): `TOOL_SPEC_VERSION=v1|v2` changes only the `get_preauthorisation` descriptor and return shape; all other tool interfaces remain fixed.
 - D2(c): `MAX_TOOL_CALLS_PER_TURN=1` is the sequential baseline; `None` allows independent multi-call turns.
-- D3(b): `python run_guardrails.py` reproduces the ten-case deterministic checklist.
+- D3(b): `python run_guardrails.py` reproduces the eleven-case deterministic checklist.
 - D5(a): `python run_eval.py` reproduces the scripted evaluation.
+- D7: the two `demo_*failure*.py` runners reproduce the before/after failures without a key or network.
 
 ## Repository map
 
@@ -57,13 +60,14 @@ docs/                     D0 and design notes
 
 Never commit `.env` or an API key. Live mode reads a key from environment/Colab secret and is only used for the measured D2(b)/D5(b) runs.
 
-## Current working-state notes
+For a local live run only, create an untracked `.env` file in the repository root:
 
-This merged working tree restores the later snapshot's provisional 40-case eval set and experiment runners while retaining the stronger Freeze runtime controls. Before final submission, read:
+```dotenv
+OPENROUTER_API_KEY=your_key_here
+```
 
-- `docs/EVAL_SET_REVIEW.md` — where/how to edit and freeze the eval set;
-- `docs/D2B_CONTROLLED_REWRITE.md` — the final one-tool D2(b) V1→V2 design;
-- `docs/WRITEUP_EVIDENCE_MAP.md` — every experiment, command, and output path;
-- `docs/MERGE_DECISIONS.md` — what was merged and which later-snapshot conflicts were deliberately not applied.
+Do not commit `.env`, share it with teammates, or include it in the NTULearn submission ZIP. The marker-facing scripted commands above do not require `.env`, an API key, or network access.
 
-Recovered paid results from the later snapshot live under `results/recovered_later_snapshot/` and must not be confused with final evidence produced by the current merged commit.
+## Evidence scope
+
+The current frozen set contains 40 cases, including 10 negative cases, for 60 trials per model. `results/live/` contains evidence produced against that shape. Historical paid runs retained under `results/recovered_later_snapshot/` used a different negative-case shape and are archival only; do not combine them with the final-shape battery as though they were one controlled experiment.

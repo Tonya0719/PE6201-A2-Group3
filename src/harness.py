@@ -27,6 +27,9 @@ D2C_REPORT_KEYS = [
     "input_tokens",
     "output_tokens",
     "api_cost",
+    "total_tool_calls",
+    "avg_tool_calls_per_turn",
+    "batched_turns",
     "max_tool_calls_in_one_turn",
     "cap_hits",
 ]
@@ -140,16 +143,39 @@ def summarize_d2c_records(records: list[dict]):
         for step in record.get("tool_history", [])
         if step.get("tool_calls")
     ]
+    total_tool_calls = sum(
+        len(step.get("tool_calls", []))
+        for record in records
+        for step in record.get("tool_history", [])
+    )
+    tool_turns = sum(
+        r.get("tool_turns", r.get("turns", 0))
+        for r in records
+    )
     summary.update({
-        "model_calls": sum(r.get("model_calls", 0) for r in records),
-        "tool_turns": sum(r.get("tool_turns", r.get("turns", 0)) for r in records),
-        "total_tool_calls": sum(
-            len(step.get("tool_calls", []))
-            for record in records
-            for step in record.get("tool_history", [])
+        "model_calls": sum(
+            r.get("model_calls", 0)
+            for r in records
         ),
-        "max_tool_calls_in_one_turn": max(tool_calls_per_turn) if tool_calls_per_turn else 0,
+        "tool_turns": tool_turns,
+        "total_tool_calls": total_tool_calls,
+        "avg_tool_calls_per_turn": (
+            total_tool_calls / tool_turns
+            if tool_turns
+            else 0
+        ),
+        "batched_turns": sum(
+            1
+            for calls_in_turn in tool_calls_per_turn
+            if calls_in_turn > 1
+        ),
+        "max_tool_calls_in_one_turn": (
+            max(tool_calls_per_turn)
+            if tool_calls_per_turn
+            else 0
+        ),
     })
+
     return summary
 
 
@@ -185,7 +211,7 @@ def run_d2c_comparison(
             negative_trials=negative_trials,
             ordinary_trials=ordinary_trials,
             approved_for_write=approved_for_write,
-            parallel_enabled=False,
+            parallel_enabled=True,
             max_tool_calls_per_turn=1,
             tool_spec_version=tool_spec_version,
             progress_callback=_progress if progress else None,

@@ -27,15 +27,15 @@ from src.harness import run_evaluation, summarize_results
 ROOT = Path(__file__).resolve().parent
 LIVE_DIR = ROOT / "results" / "live"  #change it
 
-#把自己名字所在行最前面的‘#’去掉，直接运行就可以
+# Final seven-family battery. Use --models to run only one member's model.
 MODELS = [
-    # ("openai/gpt-4o-mini", "cheap", "OpenAI"), #FANG XINYI
-    # ("amazon/nova-2-lite-v1", "mid", "Amazon"), #YANG YISHENG
-    # ("google/gemini-2.5-flash", "mid", "Google"), #PURI
-    # ("deepseek/deepseek-chat-v3.1", "cheap", "DeepSeek"), #ZHOU YIHAN
-    # ("meta-llama/llama-3.3-70b-instruct", "cheap", "Meta"),#JIAO YUXI
-    # ("mistralai/mistral-small-2603", "cheap", "Mistral"),#MA JIAN
-    # ("qwen/qwen3-30b-a3b-instruct-2507", "cheap", "Qwen"),  # WU YUSHAN
+    ("openai/gpt-4o-mini", "cheap", "OpenAI"), #FANG XINYI
+    ("amazon/nova-2-lite-v1", "mid", "Amazon"), #YANG YISHENG
+    ("google/gemini-2.5-flash", "mid", "Google"), #PURI
+    ("deepseek/deepseek-chat-v3.1", "cheap", "DeepSeek"), #ZHOU YIHAN
+    ("meta-llama/llama-3.3-70b-instruct", "cheap", "Meta"),#JIAO YUXI
+    ("mistralai/mistral-small-2603", "cheap", "Mistral"),#MA JIAN
+    ("qwen/qwen3-30b-a3b-instruct-2507", "cheap", "Qwen"),  # WU YUSHAN
 ]
 
 # Provisional recovered prices: (input USD/M tokens, output USD/M tokens).
@@ -88,6 +88,27 @@ def save(path: Path, payload: dict):
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
+def load_saved_live_summaries() -> dict:
+    """Build the aggregate from all saved per-model live result files."""
+    summaries = {}
+    for path in sorted(LIVE_DIR.glob("*.json")):
+        if path.name == "_all_models_summary.json":
+            continue
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            model = payload["model"]
+            summary = payload["summary"]
+        except (OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
+            print(f"WARNING: skipping invalid live result {path.name}: {exc}")
+            continue
+        summaries[model] = {
+            "tier": payload.get("tier"),
+            "family": payload.get("family"),
+            **summary,
+        }
+    return summaries
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="Scripted backend; no key/network/cost.")
@@ -132,9 +153,16 @@ def main():
         if not args.dry_run and summary.get("api_cost", 0.0) > PER_MODEL_BUDGET_WARNING_USD:
             print("WARNING: per-model spend exceeded the configured warning threshold.")
 
+    # Preserve earlier completed models when one member runs only a subset.
+    aggregate = all_summaries if args.dry_run else load_saved_live_summaries()
+    aggregate_total_cost = sum(
+        row.get("api_cost", 0.0)
+        for row in aggregate.values()
+        if "error" not in row
+    )
     save(LIVE_DIR / "_all_models_summary.json", {
-        "models": all_summaries,
-        "total_cost_usd": running_total_cost,
+        "models": aggregate,
+        "total_cost_usd": aggregate_total_cost,
         "backend_used": "scripted" if args.dry_run else "live",
         "tool_spec_version": "v2",
         "price_note": "Re-verify MODEL_PRICES before final submission.",

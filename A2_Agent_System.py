@@ -10,6 +10,53 @@ from src.backends import get_openrouter_credit_balance
 from src.harness import print_d2c_report, run_d2c_comparison, run_evaluation, summarize_results
 
 
+def print_run_summary(result: dict, backend: str) -> None:
+    """Print a compact demo summary after the unchanged full JSON trace."""
+    tool_path = []
+    coverage_statuses = []
+    requires_preauth = []
+    pa_records_found = None
+    valid_pa_records = None
+
+    for step in result.get("tool_history", []):
+        tool_path.extend(call.get("name", "unknown") for call in step.get("tool_calls", []))
+        for observation in step.get("observations", []):
+            if not observation.get("ok"):
+                continue
+            tool = observation.get("tool")
+            payload = observation.get("result") or {}
+            if tool == "check_coverage":
+                coverage_statuses.append(payload.get("coverage_status"))
+                requires_preauth.append(payload.get("requires_preauth"))
+            elif tool == "get_preauthorisation":
+                pa_records_found = payload.get("records_found")
+                valid_pa_records = len(payload.get("valid_records", []))
+
+    def show(label: str, value) -> None:
+        print(f"{label:<20}: {value}")
+
+    print("\nRUN SUMMARY")
+    print("=" * 60)
+    show("Case", result.get("case_id"))
+    show("Backend", backend)
+    show("Tool path", " -> ".join(tool_path) if tool_path else "none")
+    if coverage_statuses:
+        show("Coverage", ", ".join(str(x) for x in coverage_statuses))
+        show("Requires preauth", any(x is True for x in requires_preauth))
+    if pa_records_found is not None:
+        show("PA records found", pa_records_found)
+        show("Valid PA records", valid_pa_records)
+    show("Decision", result.get("decision"))
+    if result.get("trigger") is not None:
+        show("Trigger", result.get("trigger"))
+    if result.get("missing_item") is not None:
+        show("Missing item", result.get("missing_item"))
+    show("Turns", result.get("turns"))
+    show("Gated action count", result.get("gated_action_count"))
+    show("Status", result.get("status"))
+    print("=" * 60)
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--claim", default="CLM-8842")
@@ -75,6 +122,7 @@ def main():
         )
         print("\nRUN RESULT")
         print(json.dumps(result, indent=2, ensure_ascii=False))
+        print_run_summary(result, config.BACKEND)
 
 
 if __name__ == "__main__":
