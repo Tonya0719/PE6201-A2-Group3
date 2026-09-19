@@ -1,15 +1,37 @@
 # Contributions
 
-This allocation follows the team declaration dated 4 September 2026. The final consolidated repository was assembled from several team working copies, so its single import commit does not preserve the original per-member commit sequence. Contemporaneous meeting records, earlier repository snapshots and saved experiment files should be retained with the submission evidence.
+## Team information
 
-| Member | Matriculation number | Primary ownership | D-sections | Live model / v1 pass | Concrete repository evidence |
-|---|---|---|---|---|---|
-| Dechasiripong Puri | G2609142E | Agent loop and tools | D1, D2(a), D2(c) | google/gemini-2.5-flash | `src/agent_core.py`, `src/tools.py`, `results/recovered_later_snapshot/live/google__gemini-2_5-flash.json` |
-| Fang Xinyi | G2603842A | Agent loop and tools | D1, D2(a), D2(c) | openai/gpt-4o-mini | `src/agent_core.py`, `run_d2c_live.py`, `results/live/openai__gpt-4o-mini.json` |
-| Ma Jian | G2606495E | Evaluation harness and scripted run | D4, D5(a) | mistralai/mistral-small-2603 | `src/harness.py`, `run_eval.py`, `results/recovered_later_snapshot/live/mistralai__mistral-small-2603.json` |
-| Wu Yushan | G2604092L | Descriptors and guardrail layer | D2(b), D3 | v1 pass on meta-llama/llama-3.3-70b-instruct | `run_d2b_comparison.py`, `results/experiments/d2b_v1_vs_v2.json`, `run_guardrails.py` |
-| Zhou Yihan | G2606574C | Descriptors and guardrail layer | D2(b), D3 | deepseek/deepseek-chat-v3.1 | `src/guardrails.py`, `results/recovered_later_snapshot/live/deepseek__deepseek-chat-v3_1.json` |
-| Yang Yisheng | G2604043G | Cost model, ledger, sensitivity, report and demo assembly | D6, report sections 4 and 5 | amazon/nova-2-lite-v1 | `src/cost_analysis.py`, `run_cost_model.py`, `results/recovered_later_snapshot/live/amazon__nova-2-lite-v1.json` |
-| Jiao Yuxi | G2606617H | Evaluation harness and scripted run | D4, D5(a) | meta-llama/llama-3.3-70b-instruct | `src/evaluation.py`, `expected_outcomes_A.json`, `results/recovered_later_snapshot/live/meta-llama__llama-3_3-70b-instruct.json` |
+- **Team:** A-3, Section A
+- **Problem:** A — Claims first-response agent
+- **Repository:** https://github.com/Tonya0719/PE6201-A2-Group3
+- **Allocation basis:** Team Declaration dated 4 September 2026
 
-Every member contributed evaluation cases. The individual case-ID allocation was not preserved in the consolidated copy and must be supported by the team's original meeting notes or earlier working repositories if requested.
+## Member contributions
+
+| Member | Owned | Also contributed to |
+|---|---|---|
+| Dechasiripong Puri | Agent loop and tools; D1, D2(a), D2(c) | Evaluation cases; Gemini live battery; D7 failures; report/demo assembly |
+| Fang Xinyi | Agent loop and tools; D1, D2(a), D2(c) | Evaluation cases; GPT-4o-mini live battery; Meta-Llama v1 pass; report/demo assembly |
+| Zhou Yihan | Descriptors and guardrail layer; D2(b), D3 | Evaluation cases; DeepSeek live battery; report/demo assembly |
+| Wu Yushan | Descriptors and guardrail layer; D2(b), D3 | Evaluation cases; Qwen live battery |
+| Ma Jian | Evaluation harness and scripted run; D4, D5(a) | Evaluation cases; Mistral live battery |
+| Jiao Yuxi | Evaluation harness and answer key; D4, D5(a) | Evaluation cases; Meta-Llama v2 live battery |
+| Yang Yisheng | Cost model, sensitivity and ledger; D6 | Evaluation cases; Amazon Nova live battery |
+
+## Shared work and evidence
+
+Every member contributed labelled evaluation cases. The individual live-model runs, Meta-Llama v1 comparison, D7 failure work, and report/demo assembly responsibilities are recorded in the table above. The team jointly reviewed the final submission package and the eleven deterministic guardrail cases.
+
+Key shared evidence is located at:
+
+- `expected_outcomes_A.json` and `data_A/` — frozen labelled evaluation set and fixtures;
+- `results_organized/D3_guardrails/` — eleven deterministic guardrail cases;
+- `results_organized/D4_evaluation/` — deterministic and human judgement evidence;
+- `results_organized/D5_model_battery/` — scripted baseline and seven-model live battery;
+- `results_organized/D6_cost_model/` — cost model, four levers, sensitivity and break-even results;
+- `results_organized/D7_failures/` — three-run reproductions of both documented failures.
+
+## Repository-history note
+
+The final repository was consolidated from several team working copies. Consequently, a single integration commit does not preserve the complete sequence of the work performed in those copies. This file records substantive ownership and points to the resulting repository artefacts; the team should retain its declaration, meeting records, earlier repository snapshots and experiment outputs as supporting evidence. This note does not replace or recreate Git history.
