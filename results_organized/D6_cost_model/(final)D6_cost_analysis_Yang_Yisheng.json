@@ -1,0 +1,1267 @@
+{
+  "source": {
+    "workbook": "actual data for costs model.xlsx",
+    "sheet": "Sheet1",
+    "rows": {
+      "1": [
+        "Data needed",
+        "Owner / source",
+        "D6 purpose",
+        "Value",
+        "Unit / format",
+        "Notes"
+      ],
+      "2": [
+        "Each model's input tokens",
+        "D5",
+        "Layer 1",
+        11147.4,
+        "tokens/task; non-negative",
+        "Model: openai/gpt-4o-mini; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness; total_input_tokens=735726 / 66 trials"
+      ],
+      "3": [
+        "Each model's input tokens",
+        "D5",
+        "Layer 1",
+        11437.1,
+        "tokens/task; non-negative",
+        "Model: amazon/nova-2-lite-v1; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness; total_input_tokens=754848 / 66 trials"
+      ],
+      "4": [
+        "Each model's input tokens",
+        "D5",
+        "Layer 1",
+        12181.3,
+        "tokens/task; non-negative",
+        "Model: google/gemini-2.5-flash; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness; total_input_tokens=803969 / 66 trials"
+      ],
+      "5": [
+        "Each model's input tokens",
+        "D5",
+        "Layer 1",
+        11935.8,
+        "tokens/task; non-negative",
+        "Model: deepseek/deepseek-chat-v3.1; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness; total_input_tokens=787766 / 66 trials"
+      ],
+      "6": [
+        "Each model's input tokens",
+        "D5",
+        "Layer 1",
+        10326.9,
+        "tokens/task; non-negative",
+        "Model: meta-llama/llama-3.3-70b-instruct; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness; total_input_tokens=681574 / 66 trials"
+      ],
+      "7": [
+        "Each model's input tokens",
+        "D5",
+        "Layer 1",
+        11962.4,
+        "tokens/task; non-negative",
+        "Model: mistralai/mistral-small-2603; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness; total_input_tokens=789520 / 66 trials"
+      ],
+      "8": [
+        "Each model's output tokens",
+        "D5",
+        "Layer 1",
+        394.8,
+        "tokens/task; non-negative",
+        "Model: openai/gpt-4o-mini; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness; total_output_tokens=26056 / 66 trials"
+      ],
+      "9": [
+        "Each model's output tokens",
+        "D5",
+        "Layer 1",
+        531.8,
+        "tokens/task; non-negative",
+        "Model: amazon/nova-2-lite-v1; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness; total_output_tokens=35097 / 66 trials"
+      ],
+      "10": [
+        "Each model's output tokens",
+        "D5",
+        "Layer 1",
+        635.8,
+        "tokens/task; non-negative",
+        "Model: google/gemini-2.5-flash; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness; total_output_tokens=41965 / 66 trials"
+      ],
+      "11": [
+        "Each model's output tokens",
+        "D5",
+        "Layer 1",
+        542.8,
+        "tokens/task; non-negative",
+        "Model: deepseek/deepseek-chat-v3.1; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness; total_output_tokens=35828 / 66 trials"
+      ],
+      "12": [
+        "Each model's output tokens",
+        "D5",
+        "Layer 1",
+        356.5,
+        "tokens/task; non-negative",
+        "Model: meta-llama/llama-3.3-70b-instruct; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness; total_output_tokens=23529 / 66 trials"
+      ],
+      "13": [
+        "Each model's output tokens",
+        "D5",
+        "Layer 1",
+        1508.8,
+        "tokens/task; non-negative",
+        "Model: mistralai/mistral-small-2603; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness; total_output_tokens=99581 / 66 trials"
+      ],
+      "14": [
+        "Each model's success/pass rate",
+        "D4/D5",
+        "Layer 2",
+        "62.1%",
+        "percentage, e.g. 85%",
+        "Model: openai/gpt-4o-mini; 41/66 passed; pass criteria: strict match on decision + trigger/missing_item + exactly one gated write (see grade_run())"
+      ],
+      "15": [
+        "Each model's success/pass rate",
+        "D4/D5",
+        "Layer 2",
+        "56.1%",
+        "percentage, e.g. 85%",
+        "Model: amazon/nova-2-lite-v1; 37/66 passed; pass criteria: strict match on decision + trigger/missing_item + exactly one gated write (see grade_run())"
+      ],
+      "16": [
+        "Each model's success/pass rate",
+        "D4/D5",
+        "Layer 2",
+        "68.2%",
+        "percentage, e.g. 85%",
+        "Model: google/gemini-2.5-flash; 45/66 passed; pass criteria: strict match on decision + trigger/missing_item + exactly one gated write (see grade_run())"
+      ],
+      "17": [
+        "Each model's success/pass rate",
+        "D4/D5",
+        "Layer 2",
+        "62.1%",
+        "percentage, e.g. 85%",
+        "Model: deepseek/deepseek-chat-v3.1; 41/66 passed; pass criteria: strict match on decision + trigger/missing_item + exactly one gated write (see grade_run())"
+      ],
+      "18": [
+        "Each model's success/pass rate",
+        "D4/D5",
+        "Layer 2",
+        "56.1%",
+        "percentage, e.g. 85%",
+        "Model: meta-llama/llama-3.3-70b-instruct; 37/66 passed; pass criteria: strict match on decision + trigger/missing_item + exactly one gated write (see grade_run())"
+      ],
+      "19": [
+        "Each model's success/pass rate",
+        "D4/D5",
+        "Layer 2",
+        "51.5%",
+        "percentage, e.g. 85%",
+        "Model: mistralai/mistral-small-2603; 34/66 passed; pass criteria: strict match on decision + trigger/missing_item + exactly one gated write (see grade_run())"
+      ],
+      "20": [
+        "Model input/output token price",
+        "D5/model config",
+        "Layer 1",
+        "input=$0.15/M; output=$0.6/M",
+        "input=value; output=value",
+        "Model: openai/gpt-4o-mini; currency: USD; Price source: OpenRouter (see run_live_battery.py MODEL_PRICES; Verified on: 2026-09-17)"
+      ],
+      "21": [
+        "Model input/output token price",
+        "D5/model config",
+        "Layer 1",
+        "input=$0.3/M; output=$2.5/M",
+        "input=value; output=value",
+        "Model: amazon/nova-2-lite-v1; currency: USD; Price source: OpenRouter (see run_live_battery.py MODEL_PRICES; Verified on: 2026-09-17)"
+      ],
+      "22": [
+        "Model input/output token price",
+        "D5/model config",
+        "Layer 1",
+        "input=$0.3/M; output=$2.5/M",
+        "input=value; output=value",
+        "Model: google/gemini-2.5-flash; currency: USD; Price source: OpenRouter (see run_live_battery.py MODEL_PRICES; Verified on: 2026-09-17)"
+      ],
+      "23": [
+        "Model input/output token price",
+        "D5/model config",
+        "Layer 1",
+        "input=$0.25/M; output=$0.95/M",
+        "input=value; output=value",
+        "Model: deepseek/deepseek-chat-v3.1; currency: USD; Price source: OpenRouter (see run_live_battery.py MODEL_PRICES; Verified on: 2026-09-17)"
+      ],
+      "24": [
+        "Model input/output token price",
+        "D5/model config",
+        "Layer 1",
+        "input=$0.1/M; output=$0.32/M",
+        "input=value; output=value",
+        "Model: meta-llama/llama-3.3-70b-instruct; currency: USD; Price source: OpenRouter (see run_live_battery.py MODEL_PRICES; Verified on: 2026-09-17)"
+      ],
+      "25": [
+        "Model input/output token price",
+        "D5/model config",
+        "Layer 1",
+        "input=$0.15/M; output=$0.6/M",
+        "input=value; output=value",
+        "Model: mistralai/mistral-small-2603; currency: USD; Price source: OpenRouter (see run_live_battery.py MODEL_PRICES; Verified on: 2026-09-17)"
+      ],
+      "26": [
+        "Original tool definition tokens",
+        "D2(a)",
+        "Lever 1",
+        657,
+        "tokens; non-negative integer",
+        "Token source: updated authoritative API usage data; tool set version: TOOL_SPECS_V2 (5 tools)"
+      ],
+      "27": [
+        "Tool tokens after removing tools",
+        "D2(a)",
+        "Lever 1",
+        838,
+        "tokens; non-negative integer",
+        "Note: this is the reverse scenario - we didn't remove tools, we estimated what adding back check_hospital_panel and check_missing_documents as real tools would cost (+27.5%). The actual decision was to keep them as plain Python functions, not agent tools."
+      ],
+      "28": [
+        "Sequential turns/tokens",
+        "D2(c)",
+        "Lever 2",
+        "turns=258 (4.300000/task); input_tokens=572663; output_tokens=125088; api_cost=0.10730150000000001",
+        "turns=value; input_tokens=value; output_tokens=value; api_cost=USD",
+        "User-provided 60-trial live comparison; trials=60; pass_rate=0.7333333333333333; negative_pass_rate=0.6333333333333333; median_turns=4.0; worst_turns=7; tool_turns=258; model_calls=343; input_tokens=572663; output_tokens=125088; api_cost=0.10730150000000001; total_tool_calls=258; avg_tool_calls_per_turn=1.0; batched_turns=0; max_tool_calls_in_one_turn=1; cap_hits=2"
+      ],
+      "29": [
+        "Parallel/batched turns/tokens",
+        "D2(c)",
+        "Lever 2",
+        "turns=236 (3.933333/task); input_tokens=535996; output_tokens=13171; api_cost=0.058868",
+        "turns=value; input_tokens=value; output_tokens=value; api_cost=USD",
+        "User-provided 60-trial live comparison; trials=60; pass_rate=0.8333333333333334; negative_pass_rate=0.6666666666666666; median_turns=4.0; worst_turns=6; tool_turns=236; model_calls=327; input_tokens=535996; output_tokens=13171; api_cost=0.058868; total_tool_calls=261; avg_tool_calls_per_turn=1.1059322033898304; batched_turns=15; max_tool_calls_in_one_turn=4; cap_hits=0"
+      ],
+      "30": [
+        "v1 observation tokens/call",
+        "D2(b)",
+        "Lever 3",
+        9258.2,
+        "tokens/call; non-negative",
+        "Note: this is a per-task average, not per-call. Our records don't have single-tool-call granularity, only the full 66-trial batch total (611,040 input tokens). Model: deepseek-chat-v3.1; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness"
+      ],
+      "31": [
+        "v2 observation tokens/call",
+        "D2(b)",
+        "Lever 3",
+        11935.8,
+        "tokens/call; non-negative",
+        "Note: same as above, per-task average not per-call. Model: deepseek-chat-v3.1 (same model/task set as v1); total_input_tokens=787,766 / 66 trials"
+      ],
+      "32": [
+        "Final evaluation pass rate",
+        "D4",
+        "Lever 4",
+        "68.2%",
+        "percentage, e.g. 85%",
+        "Configuration: google/gemini-2.5-flash (D6's best cost-per-success model); 45/66 passed; 40-case eval set (27 positive / 13 negative), 66 trials (1x positive, 3x negative), scripted-grading harness"
+      ],
+      "33": [
+        "Step cap",
+        "Agent/guardrail owner",
+        "Final deployment parameter",
+        8,
+        "steps/task; positive integer",
+        "Source: src/config.py STEP_CAP=8; counting method: each model turn counts as one step (including the final judgment turn that calls issue_decision_letter)"
+      ],
+      "34": [
+        "Budget ceiling",
+        "Agent/guardrail owner",
+        "Final deployment parameter",
+        "$0.10",
+        "amount; non-negative",
+        "Source: src/config.py BUDGET_USD=0.10; scope: per task/claim, not per user or per month"
+      ],
+      "35": [
+        "Monthly user limit",
+        "Team decision",
+        "Final deployment parameter",
+        "8,000 (proposed)",
+        "non-negative integer; scope per notes",
+        "Scope: total claims/tasks processed per month (not number of users). Proposal: reuse the 8,000 claims/month assumption already used in the D6 cost model, for consistency across the report. This is a proposal, needs team confirmation."
+      ]
+    }
+  },
+  "basis": "displayed",
+  "currency": "USD",
+  "config": {
+    "monthly_volume": 8000,
+    "failure_cost": 7.6,
+    "monthly_fixed_cost": 0.0,
+    "tool_fee": 0.0,
+    "sensitivity_delta": 0.1
+  },
+  "notes": [
+    "当前数据来自d6_cost_model_results.json与four_levers_summary(1).json，并对照run_four_levers_summary.py；EXCEL_ROWS只保留历史记录，未独立核验原始harness日志。",
+    "当前六模型均为60 trials；P采用来源pass_rate，passed由pass_rate×60直接推导。",
+    "displayed与notes_exact均使用最新60-trial成功率和来源Layer1费用；来源未提供六模型token明细，记为None，不混用旧66-trial数据。",
+    "模型价格采用d6_cost_model_results.json的price_used快照；Price source: OpenRouter; verification date: 2026-09-17。",
+    "failure_cost默认7.60沿用Problem A；fixed_cost默认0采用组员的项目范围假设；tool_fee默认0仍为假设。实际运行值见config。",
+    "月业务量 8000 来自 D35 提案；成本外推沿用测试样本权重，未校准生产分布。",
+    "cost_per_successful_task 为兼容原代码的字段名，实际为每提交任务模型费+预期失败费。",
+    "单位成本没有除以 P；月固定成本仅在月总成本中加一次；另提供含固定分摊单位成本。",
+    "失败费模型假设每次失败产生一次给定费用；不模拟重试或证明人工兜底一定成功。",
+    "B/T/D的对比不叠加到六模型Layer1成本，避免重复计算；六模型费用直接采用最新汇总来源，未独立重跑live。",
+    "T采用用户提供的60-trial live sequential vs batched对比，记录实测turns、tokens和API费用；降幅及每任务API节省自动计算。pass rate从75%变为80%；原始API费用上升4.93%，排除异常输出的敏感性下降5.77%，两者分开报告，不主张稳定的因果费用节省。",
+    "D采用最新summary的get_preauthorisation平均返回大小：35.6→31.736842105263158权威API usage tokens/call，减少10.85%；最新调用次数和字符均值未提供。总API费用上升9.18%，不推算美元节省。",
+    "P按不同模型的最低/最高通过率比较，不再要求同一模型修改前后的P。",
+    "B采用four_levers_summary.json的D2(a) shortest defensible tool set / tried-not-adding确切数据：假设7 tools→实际5 tools，579→449 API usage tokens，每轮减少130 tokens，reduction=(579-449)/579≈22.45%。measurement_note: updated authoritative API usage data。B/D均采用更新后的权威API usage数据；原Excel对应行仅作历史来源。",
+    "每用户月限额设为100个理赔任务；8000只代表总月任务量，不是每用户额度。",
+    "step cap 和 budget ceiling 仅保存部署配置，不能由平均成本证明每次运行符合上限。",
+    "complete13更新范围：仅新增Qwen及由现有公式自动产生的结果；原六模型、B/T/D、Layer3、deployment caps及历史注释保留。以上六模型及价格核验说明沿用旧版本，不适用于新增Qwen。",
+    "Qwen已核对ZIP results_organized/cost与live及60条records：36/60通过、负例12/30通过；总input/output tokens为504642/15961，API cost为0.027255406 USD；单价为ZIP快照0.048/0.19 USD per million tokens，源文件仍标记provisional。",
+    "ZIP新版总汇总同时改变其他模型输入；按本次仅新增Qwen的范围未同步这些变化，也未复制其Gemini sensitivity数值。Qwen是最低API成本模型，Gemini仍为最低总成本/最高P模型，dominant lever仍为P。",
+    "Qwen相对Gemini的break-even使用本文件保留的Gemini费用重算；ZIP阈值0.9328877372938597使用不同Gemini费用，因此不直接混入。所有模型的sensitivity与break_even_pairs继续由现有公式计算；新增Qwen三种情景和六组配对。"
+  ],
+  "deployment": {
+    "step_cap": 8,
+    "budget_ceiling_usd_per_task": 0.1,
+    "monthly_task_limit_proposed": 8000,
+    "monthly_limit_per_user": 100,
+    "scope": "预算上限按每个 claim/task；每用户月限额为100个理赔任务；8000为总月任务量提案"
+  },
+  "model_inputs": [
+    {
+      "model": "openai/gpt-4o-mini",
+      "input_tokens": null,
+      "output_tokens": null,
+      "success_rate": 0.8,
+      "price_in_per_m": 0.15,
+      "price_out_per_m": 0.6,
+      "total_input_tokens": null,
+      "total_output_tokens": null,
+      "passed": 48,
+      "trials": 60,
+      "cells": [
+        "d6_cost_model_results.json:per_model:openai/gpt-4o-mini"
+      ],
+      "variable_cost_per_run": 0.0013052399999999996
+    },
+    {
+      "model": "amazon/nova-2-lite-v1",
+      "input_tokens": null,
+      "output_tokens": null,
+      "success_rate": 0.7,
+      "price_in_per_m": 0.3,
+      "price_out_per_m": 2.5,
+      "total_input_tokens": null,
+      "total_output_tokens": null,
+      "passed": 42,
+      "trials": 60,
+      "cells": [
+        "d6_cost_model_results.json:per_model:amazon/nova-2-lite-v1"
+      ],
+      "variable_cost_per_run": 0.002885
+    },
+    {
+      "model": "google/gemini-2.5-flash",
+      "input_tokens": null,
+      "output_tokens": null,
+      "success_rate": 0.9333333333333333,
+      "price_in_per_m": 0.3,
+      "price_out_per_m": 2.5,
+      "total_input_tokens": null,
+      "total_output_tokens": null,
+      "passed": 56,
+      "trials": 60,
+      "cells": [
+        "d6_cost_model_results.json:per_model:google/gemini-2.5-flash"
+      ],
+      "variable_cost_per_run": 0.0036652599999999996
+    },
+    {
+      "model": "deepseek/deepseek-chat-v3.1",
+      "input_tokens": null,
+      "output_tokens": null,
+      "success_rate": 0.9,
+      "price_in_per_m": 0.25,
+      "price_out_per_m": 0.95,
+      "total_input_tokens": null,
+      "total_output_tokens": null,
+      "passed": 54,
+      "trials": 60,
+      "cells": [
+        "d6_cost_model_results.json:per_model:deepseek/deepseek-chat-v3.1"
+      ],
+      "variable_cost_per_run": 0.00245386
+    },
+    {
+      "model": "meta-llama/llama-3.3-70b-instruct",
+      "input_tokens": null,
+      "output_tokens": null,
+      "success_rate": 0.7,
+      "price_in_per_m": 0.1,
+      "price_out_per_m": 0.32,
+      "total_input_tokens": null,
+      "total_output_tokens": null,
+      "passed": 42,
+      "trials": 60,
+      "cells": [
+        "d6_cost_model_results.json:per_model:meta-llama/llama-3.3-70b-instruct"
+      ],
+      "variable_cost_per_run": 0.0010648166666666664
+    },
+    {
+      "model": "mistralai/mistral-small-2603",
+      "input_tokens": null,
+      "output_tokens": null,
+      "success_rate": 0.6,
+      "price_in_per_m": 0.15,
+      "price_out_per_m": 0.6,
+      "total_input_tokens": null,
+      "total_output_tokens": null,
+      "passed": 36,
+      "trials": 60,
+      "cells": [
+        "d6_cost_model_results.json:per_model:mistralai/mistral-small-2603"
+      ],
+      "variable_cost_per_run": 0.0015218324999999996
+    },
+    {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "tier": "cheap",
+      "family": "Qwen",
+      "pass_rate": 0.6,
+      "variable_cost_per_run": 0.00045425676666666667,
+      "trials": 60,
+      "price_used": {
+        "input_usd_per_million_tokens": 0.048,
+        "output_usd_per_million_tokens": 0.19
+      },
+      "layer1_variable_cost": 0.00045425676666666667,
+      "layer2_expected_failure_cost": 3.04,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 3.0404542567666666,
+      "monthly_cost": 24323.634054133334,
+      "input_tokens": 8410.7,
+      "output_tokens": 266.01666666666665,
+      "success_rate": 0.6,
+      "negative_trials": 30,
+      "negative_pass_rate": 0.4,
+      "price_in_per_m": 0.048,
+      "price_out_per_m": 0.19,
+      "total_input_tokens": 504642,
+      "total_output_tokens": 15961,
+      "passed": 36,
+      "api_cost": 0.027255406,
+      "cells": [
+        "PE6201_A2_A-3_0918/results_organized/live/qwen__qwen3-30b-a3b-instruct-2507.json",
+        "PE6201_A2_A-3_0918/results_organized/live/_all_models_summary.json",
+        "PE6201_A2_A-3_0918/results_organized/cost/d6_cost_model_results.json",
+        "PE6201_A2_A-3_0918/results_organized/cost/four_levers_summary.json"
+      ],
+      "price_status": "ZIP snapshot; source marks prices provisional; no independent verification date provided for Qwen",
+      "source_cost_assumptions": {
+        "volume": 8000,
+        "failure_cost": 7.6,
+        "monthly_fixed_cost": 0.0
+      }
+    }
+  ],
+  "assumptions": {
+    "source": "用户提供的组员说明截图；原始Excel逐行保留于source.rows",
+    "layer3": {
+      "default_usd_per_month": 0.0,
+      "status": "team_zero_fixed_cost_assumption",
+      "basis": "当前项目直接调用API，未报告独立托管/服务器或其他固定费用，按总固定费用为零建模。",
+      "scope": "不代表生产部署天然零成本；未取得维护等逐项报价，且未核验课程是否指定其他固定成本。"
+    },
+    "failure_cost": "沿用Problem A每次失败7.60 USD（38 USD/hour × 12/60 hour）。",
+    "tool_fee": "沿用每任务0 USD的额外工具费用假设；模型API费用已计入Layer1。",
+    "monthly_volume": "沿用8000 claims/month；不等于每用户月额度。",
+    "effective_monthly_fixed_cost": 0.0,
+    "fixed_cost_overridden": false
+  },
+  "summaries": {
+    "openai/gpt-4o-mini": {
+      "layer1_variable_cost": 0.0013052399999999996,
+      "layer2_expected_failure_cost": 1.5199999999999996,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 1.5213052399999996,
+      "expected_cost_per_submitted_task": 1.5213052399999996,
+      "monthly_cost": 12170.441919999996,
+      "monthly_model_and_tool_cost": 10.441919999999996,
+      "monthly_expected_failure_cost": 12159.999999999996,
+      "unit_cost_including_fixed": 1.5213052399999996,
+      "input_tokens": null,
+      "output_tokens": null,
+      "success_rate": 0.8,
+      "price_in_per_m": 0.15,
+      "price_out_per_m": 0.6,
+      "source_cells": [
+        "d6_cost_model_results.json:per_model:openai/gpt-4o-mini"
+      ]
+    },
+    "amazon/nova-2-lite-v1": {
+      "layer1_variable_cost": 0.002885,
+      "layer2_expected_failure_cost": 2.2800000000000002,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 2.2828850000000003,
+      "expected_cost_per_submitted_task": 2.2828850000000003,
+      "monthly_cost": 18263.08,
+      "monthly_model_and_tool_cost": 23.08,
+      "monthly_expected_failure_cost": 18240.000000000004,
+      "unit_cost_including_fixed": 2.2828850000000003,
+      "input_tokens": null,
+      "output_tokens": null,
+      "success_rate": 0.7,
+      "price_in_per_m": 0.3,
+      "price_out_per_m": 2.5,
+      "source_cells": [
+        "d6_cost_model_results.json:per_model:amazon/nova-2-lite-v1"
+      ]
+    },
+    "google/gemini-2.5-flash": {
+      "layer1_variable_cost": 0.0036652599999999996,
+      "layer2_expected_failure_cost": 0.5066666666666665,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 0.5103319266666665,
+      "expected_cost_per_submitted_task": 0.5103319266666665,
+      "monthly_cost": 4082.655413333332,
+      "monthly_model_and_tool_cost": 29.322079999999996,
+      "monthly_expected_failure_cost": 4053.333333333332,
+      "unit_cost_including_fixed": 0.5103319266666665,
+      "input_tokens": null,
+      "output_tokens": null,
+      "success_rate": 0.9333333333333333,
+      "price_in_per_m": 0.3,
+      "price_out_per_m": 2.5,
+      "source_cells": [
+        "d6_cost_model_results.json:per_model:google/gemini-2.5-flash"
+      ]
+    },
+    "deepseek/deepseek-chat-v3.1": {
+      "layer1_variable_cost": 0.00245386,
+      "layer2_expected_failure_cost": 0.7599999999999998,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 0.7624538599999998,
+      "expected_cost_per_submitted_task": 0.7624538599999998,
+      "monthly_cost": 6099.630879999999,
+      "monthly_model_and_tool_cost": 19.63088,
+      "monthly_expected_failure_cost": 6079.999999999998,
+      "unit_cost_including_fixed": 0.7624538599999998,
+      "input_tokens": null,
+      "output_tokens": null,
+      "success_rate": 0.9,
+      "price_in_per_m": 0.25,
+      "price_out_per_m": 0.95,
+      "source_cells": [
+        "d6_cost_model_results.json:per_model:deepseek/deepseek-chat-v3.1"
+      ]
+    },
+    "meta-llama/llama-3.3-70b-instruct": {
+      "layer1_variable_cost": 0.0010648166666666664,
+      "layer2_expected_failure_cost": 2.2800000000000002,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 2.281064816666667,
+      "expected_cost_per_submitted_task": 2.281064816666667,
+      "monthly_cost": 18248.518533333336,
+      "monthly_model_and_tool_cost": 8.518533333333332,
+      "monthly_expected_failure_cost": 18240.000000000004,
+      "unit_cost_including_fixed": 2.281064816666667,
+      "input_tokens": null,
+      "output_tokens": null,
+      "success_rate": 0.7,
+      "price_in_per_m": 0.1,
+      "price_out_per_m": 0.32,
+      "source_cells": [
+        "d6_cost_model_results.json:per_model:meta-llama/llama-3.3-70b-instruct"
+      ]
+    },
+    "mistralai/mistral-small-2603": {
+      "layer1_variable_cost": 0.0015218324999999996,
+      "layer2_expected_failure_cost": 3.04,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 3.0415218325,
+      "expected_cost_per_submitted_task": 3.0415218325,
+      "monthly_cost": 24332.17466,
+      "monthly_model_and_tool_cost": 12.174659999999998,
+      "monthly_expected_failure_cost": 24320.0,
+      "unit_cost_including_fixed": 3.0415218325,
+      "input_tokens": null,
+      "output_tokens": null,
+      "success_rate": 0.6,
+      "price_in_per_m": 0.15,
+      "price_out_per_m": 0.6,
+      "source_cells": [
+        "d6_cost_model_results.json:per_model:mistralai/mistral-small-2603"
+      ]
+    },
+    "qwen/qwen3-30b-a3b-instruct-2507": {
+      "layer1_variable_cost": 0.00045425676666666667,
+      "layer2_expected_failure_cost": 3.04,
+      "layer3_monthly_fixed_cost": 0.0,
+      "cost_per_successful_task": 3.0404542567666666,
+      "expected_cost_per_submitted_task": 3.0404542567666666,
+      "monthly_cost": 24323.634054133334,
+      "monthly_model_and_tool_cost": 3.634054133333333,
+      "monthly_expected_failure_cost": 24320.0,
+      "unit_cost_including_fixed": 3.0404542567666666,
+      "input_tokens": 8410.7,
+      "output_tokens": 266.01666666666665,
+      "success_rate": 0.6,
+      "price_in_per_m": 0.048,
+      "price_out_per_m": 0.19,
+      "source_cells": [
+        "PE6201_A2_A-3_0918/results_organized/live/qwen__qwen3-30b-a3b-instruct-2507.json",
+        "PE6201_A2_A-3_0918/results_organized/live/_all_models_summary.json",
+        "PE6201_A2_A-3_0918/results_organized/cost/d6_cost_model_results.json",
+        "PE6201_A2_A-3_0918/results_organized/cost/four_levers_summary.json"
+      ]
+    }
+  },
+  "sensitivity": {
+    "openai/gpt-4o-mini": {
+      "minus_10pp": {
+        "layer1_variable_cost": 0.0013052399999999996,
+        "layer2_expected_failure_cost": 2.2799999999999994,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 2.2813052399999996,
+        "expected_cost_per_submitted_task": 2.2813052399999996,
+        "monthly_cost": 18250.441919999997,
+        "monthly_model_and_tool_cost": 10.441919999999996,
+        "monthly_expected_failure_cost": 18239.999999999996,
+        "unit_cost_including_fixed": 2.2813052399999996,
+        "success_rate": 0.7000000000000001
+      },
+      "base": {
+        "layer1_variable_cost": 0.0013052399999999996,
+        "layer2_expected_failure_cost": 1.5199999999999996,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 1.5213052399999996,
+        "expected_cost_per_submitted_task": 1.5213052399999996,
+        "monthly_cost": 12170.441919999996,
+        "monthly_model_and_tool_cost": 10.441919999999996,
+        "monthly_expected_failure_cost": 12159.999999999996,
+        "unit_cost_including_fixed": 1.5213052399999996,
+        "success_rate": 0.8
+      },
+      "plus_10pp": {
+        "layer1_variable_cost": 0.0013052399999999996,
+        "layer2_expected_failure_cost": 0.7599999999999998,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 0.7613052399999998,
+        "expected_cost_per_submitted_task": 0.7613052399999998,
+        "monthly_cost": 6090.441919999998,
+        "monthly_model_and_tool_cost": 10.441919999999996,
+        "monthly_expected_failure_cost": 6079.999999999998,
+        "unit_cost_including_fixed": 0.7613052399999998,
+        "success_rate": 0.9
+      }
+    },
+    "amazon/nova-2-lite-v1": {
+      "minus_10pp": {
+        "layer1_variable_cost": 0.002885,
+        "layer2_expected_failure_cost": 3.04,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 3.042885,
+        "expected_cost_per_submitted_task": 3.042885,
+        "monthly_cost": 24343.08,
+        "monthly_model_and_tool_cost": 23.08,
+        "monthly_expected_failure_cost": 24320.0,
+        "unit_cost_including_fixed": 3.042885,
+        "success_rate": 0.6
+      },
+      "base": {
+        "layer1_variable_cost": 0.002885,
+        "layer2_expected_failure_cost": 2.2800000000000002,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 2.2828850000000003,
+        "expected_cost_per_submitted_task": 2.2828850000000003,
+        "monthly_cost": 18263.08,
+        "monthly_model_and_tool_cost": 23.08,
+        "monthly_expected_failure_cost": 18240.000000000004,
+        "unit_cost_including_fixed": 2.2828850000000003,
+        "success_rate": 0.7
+      },
+      "plus_10pp": {
+        "layer1_variable_cost": 0.002885,
+        "layer2_expected_failure_cost": 1.5200000000000005,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 1.5228850000000005,
+        "expected_cost_per_submitted_task": 1.5228850000000005,
+        "monthly_cost": 12183.080000000004,
+        "monthly_model_and_tool_cost": 23.08,
+        "monthly_expected_failure_cost": 12160.000000000004,
+        "unit_cost_including_fixed": 1.5228850000000005,
+        "success_rate": 0.7999999999999999
+      }
+    },
+    "google/gemini-2.5-flash": {
+      "minus_10pp": {
+        "layer1_variable_cost": 0.0036652599999999996,
+        "layer2_expected_failure_cost": 1.2666666666666664,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 1.2703319266666664,
+        "expected_cost_per_submitted_task": 1.2703319266666664,
+        "monthly_cost": 10162.65541333333,
+        "monthly_model_and_tool_cost": 29.322079999999996,
+        "monthly_expected_failure_cost": 10133.33333333333,
+        "unit_cost_including_fixed": 1.2703319266666662,
+        "success_rate": 0.8333333333333334
+      },
+      "base": {
+        "layer1_variable_cost": 0.0036652599999999996,
+        "layer2_expected_failure_cost": 0.5066666666666665,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 0.5103319266666665,
+        "expected_cost_per_submitted_task": 0.5103319266666665,
+        "monthly_cost": 4082.655413333332,
+        "monthly_model_and_tool_cost": 29.322079999999996,
+        "monthly_expected_failure_cost": 4053.333333333332,
+        "unit_cost_including_fixed": 0.5103319266666665,
+        "success_rate": 0.9333333333333333
+      },
+      "plus_10pp": {
+        "layer1_variable_cost": 0.0036652599999999996,
+        "layer2_expected_failure_cost": 0.0,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 0.0036652599999999996,
+        "expected_cost_per_submitted_task": 0.0036652599999999996,
+        "monthly_cost": 29.322079999999996,
+        "monthly_model_and_tool_cost": 29.322079999999996,
+        "monthly_expected_failure_cost": 0.0,
+        "unit_cost_including_fixed": 0.0036652599999999996,
+        "success_rate": 1
+      }
+    },
+    "deepseek/deepseek-chat-v3.1": {
+      "minus_10pp": {
+        "layer1_variable_cost": 0.00245386,
+        "layer2_expected_failure_cost": 1.5199999999999996,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 1.5224538599999995,
+        "expected_cost_per_submitted_task": 1.5224538599999995,
+        "monthly_cost": 12179.630879999995,
+        "monthly_model_and_tool_cost": 19.63088,
+        "monthly_expected_failure_cost": 12159.999999999996,
+        "unit_cost_including_fixed": 1.5224538599999995,
+        "success_rate": 0.8
+      },
+      "base": {
+        "layer1_variable_cost": 0.00245386,
+        "layer2_expected_failure_cost": 0.7599999999999998,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 0.7624538599999998,
+        "expected_cost_per_submitted_task": 0.7624538599999998,
+        "monthly_cost": 6099.630879999999,
+        "monthly_model_and_tool_cost": 19.63088,
+        "monthly_expected_failure_cost": 6079.999999999998,
+        "unit_cost_including_fixed": 0.7624538599999998,
+        "success_rate": 0.9
+      },
+      "plus_10pp": {
+        "layer1_variable_cost": 0.00245386,
+        "layer2_expected_failure_cost": 0.0,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 0.00245386,
+        "expected_cost_per_submitted_task": 0.00245386,
+        "monthly_cost": 19.63088,
+        "monthly_model_and_tool_cost": 19.63088,
+        "monthly_expected_failure_cost": 0.0,
+        "unit_cost_including_fixed": 0.00245386,
+        "success_rate": 1
+      }
+    },
+    "meta-llama/llama-3.3-70b-instruct": {
+      "minus_10pp": {
+        "layer1_variable_cost": 0.0010648166666666664,
+        "layer2_expected_failure_cost": 3.04,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 3.0410648166666667,
+        "expected_cost_per_submitted_task": 3.0410648166666667,
+        "monthly_cost": 24328.518533333332,
+        "monthly_model_and_tool_cost": 8.518533333333332,
+        "monthly_expected_failure_cost": 24320.0,
+        "unit_cost_including_fixed": 3.0410648166666663,
+        "success_rate": 0.6
+      },
+      "base": {
+        "layer1_variable_cost": 0.0010648166666666664,
+        "layer2_expected_failure_cost": 2.2800000000000002,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 2.281064816666667,
+        "expected_cost_per_submitted_task": 2.281064816666667,
+        "monthly_cost": 18248.518533333336,
+        "monthly_model_and_tool_cost": 8.518533333333332,
+        "monthly_expected_failure_cost": 18240.000000000004,
+        "unit_cost_including_fixed": 2.281064816666667,
+        "success_rate": 0.7
+      },
+      "plus_10pp": {
+        "layer1_variable_cost": 0.0010648166666666664,
+        "layer2_expected_failure_cost": 1.5200000000000005,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 1.5210648166666672,
+        "expected_cost_per_submitted_task": 1.5210648166666672,
+        "monthly_cost": 12168.518533333337,
+        "monthly_model_and_tool_cost": 8.518533333333332,
+        "monthly_expected_failure_cost": 12160.000000000004,
+        "unit_cost_including_fixed": 1.5210648166666672,
+        "success_rate": 0.7999999999999999
+      }
+    },
+    "mistralai/mistral-small-2603": {
+      "minus_10pp": {
+        "layer1_variable_cost": 0.0015218324999999996,
+        "layer2_expected_failure_cost": 3.8,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 3.8015218324999998,
+        "expected_cost_per_submitted_task": 3.8015218324999998,
+        "monthly_cost": 30412.174659999997,
+        "monthly_model_and_tool_cost": 12.174659999999998,
+        "monthly_expected_failure_cost": 30400.0,
+        "unit_cost_including_fixed": 3.8015218324999998,
+        "success_rate": 0.5
+      },
+      "base": {
+        "layer1_variable_cost": 0.0015218324999999996,
+        "layer2_expected_failure_cost": 3.04,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 3.0415218325,
+        "expected_cost_per_submitted_task": 3.0415218325,
+        "monthly_cost": 24332.17466,
+        "monthly_model_and_tool_cost": 12.174659999999998,
+        "monthly_expected_failure_cost": 24320.0,
+        "unit_cost_including_fixed": 3.0415218325,
+        "success_rate": 0.6
+      },
+      "plus_10pp": {
+        "layer1_variable_cost": 0.0015218324999999996,
+        "layer2_expected_failure_cost": 2.2800000000000002,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 2.2815218325,
+        "expected_cost_per_submitted_task": 2.2815218325,
+        "monthly_cost": 18252.17466,
+        "monthly_model_and_tool_cost": 12.174659999999998,
+        "monthly_expected_failure_cost": 18240.000000000004,
+        "unit_cost_including_fixed": 2.2815218325,
+        "success_rate": 0.7
+      }
+    },
+    "qwen/qwen3-30b-a3b-instruct-2507": {
+      "minus_10pp": {
+        "layer1_variable_cost": 0.00045425676666666667,
+        "layer2_expected_failure_cost": 3.8,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 3.8004542567666664,
+        "expected_cost_per_submitted_task": 3.8004542567666664,
+        "monthly_cost": 30403.63405413333,
+        "monthly_model_and_tool_cost": 3.634054133333333,
+        "monthly_expected_failure_cost": 30400.0,
+        "unit_cost_including_fixed": 3.8004542567666664,
+        "success_rate": 0.5
+      },
+      "base": {
+        "layer1_variable_cost": 0.00045425676666666667,
+        "layer2_expected_failure_cost": 3.04,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 3.0404542567666666,
+        "expected_cost_per_submitted_task": 3.0404542567666666,
+        "monthly_cost": 24323.634054133334,
+        "monthly_model_and_tool_cost": 3.634054133333333,
+        "monthly_expected_failure_cost": 24320.0,
+        "unit_cost_including_fixed": 3.0404542567666666,
+        "success_rate": 0.6
+      },
+      "plus_10pp": {
+        "layer1_variable_cost": 0.00045425676666666667,
+        "layer2_expected_failure_cost": 2.2800000000000002,
+        "layer3_monthly_fixed_cost": 0.0,
+        "cost_per_successful_task": 2.280454256766667,
+        "expected_cost_per_submitted_task": 2.280454256766667,
+        "monthly_cost": 18243.634054133334,
+        "monthly_model_and_tool_cost": 3.634054133333333,
+        "monthly_expected_failure_cost": 18240.000000000004,
+        "unit_cost_including_fixed": 2.280454256766667,
+        "success_rate": 0.7
+      }
+    }
+  },
+  "break_even_pairs": [
+    {
+      "cheap_api_model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "reference_model": "meta-llama/llama-3.3-70b-instruct",
+      "required_success_rate": 0.6999196631710526,
+      "status": "feasible",
+      "current_success_rate": 0.6,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "reference_model": "openai/gpt-4o-mini",
+      "required_success_rate": 0.7998880285219299,
+      "status": "feasible",
+      "current_success_rate": 0.6,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "reference_model": "mistralai/mistral-small-2603",
+      "required_success_rate": 0.5998595295087719,
+      "status": "feasible",
+      "current_success_rate": 0.6,
+      "cheap_current_cost_no_higher": true
+    },
+    {
+      "cheap_api_model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "reference_model": "deepseek/deepseek-chat-v3.1",
+      "required_success_rate": 0.8997368943114035,
+      "status": "feasible",
+      "current_success_rate": 0.6,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "reference_model": "amazon/nova-2-lite-v1",
+      "required_success_rate": 0.699680165364035,
+      "status": "feasible",
+      "current_success_rate": 0.6,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "reference_model": "google/gemini-2.5-flash",
+      "required_success_rate": 0.9329108329078948,
+      "status": "feasible",
+      "current_success_rate": 0.6,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "meta-llama/llama-3.3-70b-instruct",
+      "reference_model": "openai/gpt-4o-mini",
+      "required_success_rate": 0.7999683653508772,
+      "status": "feasible",
+      "current_success_rate": 0.7,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "meta-llama/llama-3.3-70b-instruct",
+      "reference_model": "mistralai/mistral-small-2603",
+      "required_success_rate": 0.5999398663377193,
+      "status": "feasible",
+      "current_success_rate": 0.7,
+      "cheap_current_cost_no_higher": true
+    },
+    {
+      "cheap_api_model": "meta-llama/llama-3.3-70b-instruct",
+      "reference_model": "deepseek/deepseek-chat-v3.1",
+      "required_success_rate": 0.899817231140351,
+      "status": "feasible",
+      "current_success_rate": 0.7,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "meta-llama/llama-3.3-70b-instruct",
+      "reference_model": "amazon/nova-2-lite-v1",
+      "required_success_rate": 0.6997605021929825,
+      "status": "feasible",
+      "current_success_rate": 0.7,
+      "cheap_current_cost_no_higher": true
+    },
+    {
+      "cheap_api_model": "meta-llama/llama-3.3-70b-instruct",
+      "reference_model": "google/gemini-2.5-flash",
+      "required_success_rate": 0.9329911697368422,
+      "status": "feasible",
+      "current_success_rate": 0.7,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "openai/gpt-4o-mini",
+      "reference_model": "mistralai/mistral-small-2603",
+      "required_success_rate": 0.599971500986842,
+      "status": "feasible",
+      "current_success_rate": 0.8,
+      "cheap_current_cost_no_higher": true
+    },
+    {
+      "cheap_api_model": "openai/gpt-4o-mini",
+      "reference_model": "deepseek/deepseek-chat-v3.1",
+      "required_success_rate": 0.8998488657894737,
+      "status": "feasible",
+      "current_success_rate": 0.8,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "openai/gpt-4o-mini",
+      "reference_model": "amazon/nova-2-lite-v1",
+      "required_success_rate": 0.6997921368421052,
+      "status": "feasible",
+      "current_success_rate": 0.8,
+      "cheap_current_cost_no_higher": true
+    },
+    {
+      "cheap_api_model": "openai/gpt-4o-mini",
+      "reference_model": "google/gemini-2.5-flash",
+      "required_success_rate": 0.933022804385965,
+      "status": "feasible",
+      "current_success_rate": 0.8,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "mistralai/mistral-small-2603",
+      "reference_model": "deepseek/deepseek-chat-v3.1",
+      "required_success_rate": 0.8998773648026316,
+      "status": "feasible",
+      "current_success_rate": 0.6,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "mistralai/mistral-small-2603",
+      "reference_model": "amazon/nova-2-lite-v1",
+      "required_success_rate": 0.6998206358552631,
+      "status": "feasible",
+      "current_success_rate": 0.6,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "mistralai/mistral-small-2603",
+      "reference_model": "google/gemini-2.5-flash",
+      "required_success_rate": 0.9330513033991228,
+      "status": "feasible",
+      "current_success_rate": 0.6,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "deepseek/deepseek-chat-v3.1",
+      "reference_model": "amazon/nova-2-lite-v1",
+      "required_success_rate": 0.6999432710526315,
+      "status": "feasible",
+      "current_success_rate": 0.9,
+      "cheap_current_cost_no_higher": true
+    },
+    {
+      "cheap_api_model": "deepseek/deepseek-chat-v3.1",
+      "reference_model": "google/gemini-2.5-flash",
+      "required_success_rate": 0.9331739385964912,
+      "status": "feasible",
+      "current_success_rate": 0.9,
+      "cheap_current_cost_no_higher": false
+    },
+    {
+      "cheap_api_model": "amazon/nova-2-lite-v1",
+      "reference_model": "google/gemini-2.5-flash",
+      "required_success_rate": 0.9332306675438596,
+      "status": "feasible",
+      "current_success_rate": 0.7,
+      "cheap_current_cost_no_higher": false
+    }
+  ],
+  "lowest_cost_model_under_assumptions": "google/gemini-2.5-flash",
+  "four_lever_ledger": {
+    "B": {
+      "source": "four_levers_summary.json — lever_1_tool_block_size",
+      "status": "reported_d2a_tool_selection_with_authoritative_api_usage",
+      "metric": "完整工具定义块（Full tool-spec），7-tool before → 5-tool after (authoritative API usage tokens)",
+      "built_in": "D2(a) shortest defensible tool set",
+      "actual_agent_visible_tools": 5,
+      "hypothetical_agent_visible_tools": 7,
+      "actual_5_tool_spec_tokens_est": 449,
+      "hypothetical_7_tool_spec_tokens_est": 579,
+      "increase_tokens_per_turn_est": 130,
+      "measurement_note": "updated authoritative API usage data",
+      "token_estimation_method": "updated authoritative API usage data",
+      "before_estimated_tool_tokens": 579,
+      "after_estimated_tool_tokens": 449,
+      "reduction_tokens_per_turn": 130,
+      "reduction_pct": 22.452504317789295,
+      "tokens_saved_per_tool_block": 130,
+      "reduction_fraction": 0.22452504317789293,
+      "cost_saving_per_task": null,
+      "note": "D2(a) shortest defensible tool set / tried-not-adding：假设7个Agent可见工具的定义块为579 API usage tokens，实际保留5个工具为449 API usage tokens，每轮减少130 tokens，按(579-449)/579计算减少约22.45%。measurement_note: updated authoritative API usage data。属于工具选择的权威API usage数据，不是D2(b) descriptor rewrite。旧Excel 657/838仅留作历史来源记录。"
+    },
+    "T": {
+      "source": "用户提供的60-trial live sequential vs batched comparison",
+      "status": "reported_live_turn_token_cost_comparison",
+      "metric": "顺序vs并行/batched的工具轮数、模型调用次数、tokens及API费用",
+      "backend": "live",
+      "model": "meta-llama/llama-3.3-70b-instruct",
+      "formal_live_run": true,
+      "output_token_outlier_analysis": {
+        "method": "Flag a batched record when output_tokens exceeds both 2,000 and 10 times the batched median.",
+        "batched_median_output_tokens_per_record": 216.0,
+        "flagged_records": [
+          {
+            "case_id": "CLM-8941",
+            "trial": 1,
+            "negative": true,
+            "status": "failed",
+            "failure_reason": "INVALID_OR_MULTIPLE_JSON",
+            "output_tokens": 16410,
+            "visible_response_characters": 380
+          }
+        ],
+        "flagged_output_tokens": 16410,
+        "flagged_share_of_batched_output_pct": 57.265494137353436,
+        "raw_measured_result": {
+          "batched_output_tokens": 28656,
+          "output_token_change_pct": 112.67626540002968,
+          "batched_api_cost": 0.06438350000000002,
+          "api_cost_change_pct": 4.932436506940572
+        },
+        "outlier_exclusion_sensitivity": {
+          "batched_output_tokens": 12246,
+          "output_token_change_pct": -9.113848894166543,
+          "batched_api_cost": 0.057819500000000024,
+          "api_cost_change_pct": -5.765591920087435,
+          "note": "Sensitivity only: subtracts the provider-reported output tokens of flagged records. It does not replace the primary measured result."
+        }
+      },
+      "sequential": {
+        "trials": 60,
+        "pass_rate": 0.75,
+        "negative_pass_rate": 0.6333333333333333,
+        "median_turns": null,
+        "worst_turns": null,
+        "tool_turns": 249,
+        "model_calls": 337,
+        "input_tokens": 559675,
+        "output_tokens": 13474,
+        "api_cost": 0.06135709999999999,
+        "total_tool_calls": null,
+        "avg_tool_calls_per_turn": null,
+        "batched_turns": null,
+        "max_tool_calls_in_one_turn": null,
+        "cap_hits": 1
+      },
+      "batched": {
+        "trials": 60,
+        "pass_rate": 0.8,
+        "negative_pass_rate": 0.6333333333333333,
+        "median_turns": null,
+        "worst_turns": null,
+        "tool_turns": 234,
+        "model_calls": 324,
+        "input_tokens": 529211,
+        "output_tokens": 28656,
+        "api_cost": 0.06438350000000002,
+        "total_tool_calls": null,
+        "avg_tool_calls_per_turn": null,
+        "batched_turns": 15,
+        "max_tool_calls_in_one_turn": 4,
+        "cap_hits": 0
+      },
+      "trials": 60,
+      "sequential_total_turns": 249,
+      "parallel_total_turns": 234,
+      "sequential_turns_per_task": 4.15,
+      "parallel_turns_per_task": 3.9,
+      "displayed_turns_per_task": [
+        4.15,
+        3.9
+      ],
+      "sequential_model_calls": 337,
+      "parallel_model_calls": 324,
+      "model_calls_per_task": [
+        5.616666666666666,
+        5.4
+      ],
+      "turn_reduction_fraction": 0.060240963855421686,
+      "turns_saved_total": 15,
+      "model_calls_saved_total": 13,
+      "model_call_reduction_fraction": 0.03857566765578635,
+      "source_reported_tokens": [
+        559675,
+        529211
+      ],
+      "measured_tokens": {
+        "input_tokens": [
+          559675,
+          529211
+        ],
+        "output_tokens": [
+          13474,
+          28656
+        ]
+      },
+      "input_token_reduction_fraction": 0.054431589761915394,
+      "output_token_reduction_fraction": -1.1267626540002968,
+      "api_cost_reduction_fraction": -0.04932436506940572,
+      "cost_saving_per_task": -5.0440000000000554e-05,
+      "pass_rate_gain_pp": 5.000000000000004,
+      "negative_pass_rate_gain_pp": 0.0,
+      "note": "采用用户提供的60-trial live对比数据；parallel对应batched。total_turns使用tool_turns，区别于model_calls和total_tool_calls。pass rate从75%升至80%，negative pass rate保持63.33%；未提供的新运行统计字段记为None，旧值保留于EXCEL_ROWS。原始API费用上升4.93%，outlier-exclusion sensitivity下降5.77%，不能宣称稳定的总费用节省；correctness并非不变；运行路径变化，不能将全部通过率、token或费用差异仅归因于轮数减少。cost_saving_per_task仅为实测API费用差额除以各自trials，不改变Layer 1/2/3或其他lever。cap_hits仅为本对比的观测结果，不修改部署caps。"
+    },
+    "D": {
+      "source": "four_levers_summary(1).json — lever_3_observation_size",
+      "status": "reported_observation_with_authoritative_api_usage",
+      "metric": "get_preauthorisation每次调用的平均返回大小（observation），V1 → V2",
+      "model": "meta-llama/llama-3.3-70b-instruct",
+      "backend": "live",
+      "target_tool": "get_preauthorisation",
+      "historical_observation_details": {
+        "v1_calls_observed": 24,
+        "v2_calls_observed": 21,
+        "v1_avg_return_chars_per_call": 133.5,
+        "v2_avg_return_chars_per_call": 121.66666666666667
+      },
+      "v1_calls_observed": null,
+      "v2_calls_observed": null,
+      "v1_avg_return_chars_per_call": null,
+      "v2_avg_return_chars_per_call": null,
+      "v1": {
+        "trials": 60,
+        "pass_rate": 0.7166666666666667,
+        "negative_pass_rate": 0.5,
+        "input_tokens": 497985,
+        "output_tokens": 12768,
+        "api_cost": 0.053884259999999996,
+        "avg_estimated_return_tokens_per_call": 35.6,
+        "guardrails_passed": 11
+      },
+      "v2": {
+        "trials": 60,
+        "pass_rate": 0.8166666666666667,
+        "negative_pass_rate": 0.6333333333333333,
+        "input_tokens": 546448,
+        "output_tokens": 13089,
+        "api_cost": 0.05883328000000001,
+        "avg_estimated_return_tokens_per_call": 31.736842105263158,
+        "guardrails_passed": 11
+      },
+      "deltas": {
+        "return_tokens_per_call_reduction_pct": 10.851567120047314,
+        "pass_rate_percentage_points": 9.999999999999998,
+        "negative_pass_rate_percentage_points": 13.33333333333333,
+        "input_token_change_pct": 9.731819231502957,
+        "output_token_change_pct": 2.5140977443609023,
+        "api_cost_change_pct": 9.184537376963165
+      },
+      "token_estimation_method": "updated authoritative API usage data; per-call averages as reported",
+      "v1_avg_estimated_return_tokens_per_call": 35.6,
+      "v2_avg_estimated_return_tokens_per_call": 31.736842105263158,
+      "estimated_tokens_saved_per_call": 3.863157894736844,
+      "estimated_token_reduction_fraction": 0.10851567120047313,
+      "avg_return_chars_saved_per_call": null,
+      "return_char_reduction_fraction": null,
+      "cost_saving_per_task": null,
+      "note": "采用报告中目标工具的平均返回大小，不代表所有工具的平均observation。最新来源未提供调用次数和平均字符数，旧值仅存于historical_observation_details；V1/V2均为60 trials，返回权威API usage tokens/call为35.6→31.736842105263158，下降10.85%，总API费用却上升9.18%；tokens采用更新后的权威API usage数据。不能由每次返回减少约3.8632个API usage tokens直接推算整任务或月度美元节省。原Excel D30:D31仅留作历史来源，不再用于D。"
+    },
+    "P": {
+      "source": "d6_cost_model_results.json及four_levers_summary(1).json — lever_4_success_rate",
+      "status": "cross_model_lowest_vs_highest_pass_rate",
+      "dominant_lever": "P",
+      "interpretation": "Expected human fallback cost dominates API cost; success rate is the largest lever.",
+      "baseline_model": "mistralai/mistral-small-2603",
+      "comparison_model": "google/gemini-2.5-flash",
+      "baseline_success_rate": 0.6,
+      "comparison_success_rate": 0.9333333333333333,
+      "success_rate_gain_pp": 33.333333333333336,
+      "failure_cost_per_failure": 7.6,
+      "baseline_layer2_per_task": 3.04,
+      "comparison_layer2_per_task": 0.5066666666666665,
+      "failure_cost_saving_per_task": 2.5333333333333337,
+      "monthly_failure_cost_saving": 20266.666666666668,
+      "layer1_cost_increase_per_task": 0.0021434275,
+      "baseline_total_cost_per_task": 3.0415218325,
+      "comparison_total_cost_per_task": 0.5103319266666665,
+      "total_cost_saving_per_task": 2.5311899058333336,
+      "monthly_total_cost_saving": 20249.51924666667,
+      "note": "比较最低与最高P模型（当前为Mistral与Gemini），不是同一模型改动前后。总费用差额同时计入各自Layer1；表中来源尚未经过原始日志核实。"
+    }
+  }
+}
